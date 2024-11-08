@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\StudentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: StudentRepository::class)]
@@ -13,6 +15,8 @@ class Student extends User
     {
         parent::__construct();
         $this->setRoles(['ROLE_STUDENT']);
+        $this->applications = new ArrayCollection();
+        $this->skills = new ArrayCollection();
     }
 
     #[ORM\Column(length: 255)]
@@ -24,8 +28,17 @@ class Student extends User
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $education = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?array $skills = null;
+    /**
+     * @var Collection<int, Application>
+     */
+    #[ORM\OneToMany(targetEntity: Application::class, mappedBy: 'studentId', orphanRemoval: true)]
+    private Collection $applications;
+
+    /**
+     * @var Collection<int, Skill>
+     */
+    #[ORM\ManyToMany(targetEntity: Skill::class, mappedBy: 'studentId')]
+    private Collection $skills;
 
     public function getFirstName(): ?string
     {
@@ -63,14 +76,59 @@ class Student extends User
         return $this;
     }
 
-    public function getSkills(): ?array
+    /**
+     * @return Collection<int, Application>
+     */
+    public function getApplications(): Collection
+    {
+        return $this->applications;
+    }
+
+    public function addApplication(Application $application): static
+    {
+        if (!$this->applications->contains($application)) {
+            $this->applications->add($application);
+            $application->setStudentId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApplication(Application $application): static
+    {
+        if ($this->applications->removeElement($application)) {
+            // set the owning side to null (unless already changed)
+            if ($application->getStudentId() === $this) {
+                $application->setStudentId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Skill>
+     */
+    public function getSkills(): Collection
     {
         return $this->skills;
     }
 
-    public function setSkills(?array $skills): static
+    public function addSkill(Skill $skill): static
     {
-        $this->skills = $skills;
+        if (!$this->skills->contains($skill)) {
+            $this->skills->add($skill);
+            $skill->addStudentId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSkill(Skill $skill): static
+    {
+        if ($this->skills->removeElement($skill)) {
+            $skill->removeStudentId($this);
+        }
 
         return $this;
     }
