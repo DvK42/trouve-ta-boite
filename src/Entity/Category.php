@@ -24,6 +24,19 @@ class Category
     #[ORM\JoinColumn(nullable: false)]
     private ?Offer $offerId = null;
 
+    public const CATEGORIES = [
+        'Informatique',
+        'Marketing',
+        'Finance',
+        'Ressources Humaines',
+        'Logistique',
+        'Design',
+        'Management',
+        'Vente',
+        'Juridique',
+        'Santé',
+    ];
+
     public function getId(): ?int
     {
         return $this->id;

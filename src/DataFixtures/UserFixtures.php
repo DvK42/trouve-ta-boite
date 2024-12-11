@@ -7,10 +7,11 @@ use App\Entity\User;
 use App\Entity\Student;
 use App\Entity\Company;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class UserFixtures extends Fixture
+class UserFixtures extends Fixture implements OrderedFixtureInterface
 {
     private UserPasswordHasherInterface $passwordHasher;
 
@@ -52,5 +53,11 @@ class UserFixtures extends Fixture
         // Sauvegarder les données en base
         $manager->flush();
     }
+
+        public function getOrder(): int
+    {
+        return 1;
+    }
+
 }
 
