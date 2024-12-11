@@ -6,10 +6,11 @@ use App\Repository\StudentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: StudentRepository::class)]
 #[ORM\DiscriminatorMap(["student" => "Student"])]
-class Student extends User
+class Student extends User implements UserInterface
 {
     public function __construct()
     {
@@ -131,5 +132,14 @@ class Student extends User
         }
 
         return $this;
+    }
+
+    public function eraseCredentials(): void
+    {
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->getEmail();
     }
 }
