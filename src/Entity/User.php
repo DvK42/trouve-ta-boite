@@ -189,4 +189,28 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getUserTypeString(): string
+    {
+        if ($this instanceof Student) {
+            return 'Etudiant';
+        } elseif ($this instanceof Company) {
+            return 'Entreprise';
+        } elseif ($this instanceof Admin) {
+            return 'Administrateur';
+        }
+
+        return 'Inconnu';
+    }
+
+    public function getDisplayName(): string
+    {
+        if ($this instanceof Student) {
+            return $this->getFirstName() . ' ' . $this->getLastName();
+        } elseif ($this instanceof Company) {
+            return $this->getName();
+        }
+        return 'Administrateur'; 
+    }
+
 }
