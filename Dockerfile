@@ -13,6 +13,9 @@ RUN apt-get update && apt-get install -y \
     default-mysql-client \
     && docker-php-ext-configure intl \
     && docker-php-ext-install zip pdo pdo_pgsql pdo_mysql intl \
+    && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install -g npm@latest \
     && rm -rf /var/lib/apt/lists/*
 
 # Installer Composer
