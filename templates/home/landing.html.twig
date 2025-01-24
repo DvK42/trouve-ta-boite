@@ -3,26 +3,36 @@
 {% block title %}Trouve Ta Boîte - Bienvenue{% endblock %}
 
 {% block body %}
-<div class="landing-container">
-    <header class="landing-header">
-        <h1>Bienvenue sur Trouve Ta Boîte</h1>
-        <p>Découvrez les meilleures offres de stage et d'alternance adaptées à vos besoins !</p>
-        <a href="{{ path('app_login') }}" class="btn btn-primary">Se connecter</a>
-        {# <a href="{{ path('app_register') }}" class="btn btn-secondary">Créer un compte</a> #}
-    </header>
-    <section class="features">
-        <h2>Pourquoi Trouve Ta Boîte ?</h2>
-        <div class="feature">
-            <h3>Pour les étudiants</h3>
-            <p>Explorez des milliers d'opportunités de stage et d'alternance.</p>
+<section class="bg-[#eff6ff] pt-16">
+    <div class="container flex justify-between mx-auto">
+    <div class="px-6">
+        <h1 class="text-6xl font-bold mb-6 max-w-2/3 ">
+            Trouver un stage n’aura jamais été <br />
+            <span class="text-blue-600">aussi facile !</span>
+        </h1>
+        <p class="text-lg text-gray-700 mb-4">
+            Trouvez les offres de stage ou d’alternance près de chez vous qui correspondent
+            à votre profil et à vos attentes.
+        </p>
+        <p class="text-gray-800 text-lg font-semibold">
+            <span class="text-blue-600 font-bold">{{ countStages }}</span> offres de <strong>stages</strong> | 
+            <span class="text-blue-600 font-bold">{{ countAlternances }}</span> offres <strong>d’alternance</strong> n’attendent que vous !
+        </p>
+    </div>
+    <img src="{{ asset('build/images/home-hero-boy.png') }}" alt="Hero boy" class="max-h-[400px]">
+    </div>
+</section>
+
+<section class="py-12 bg-white">
+    <div class="container mx-auto text-center">
+        <h3 class="text-2xl font-bold text-gray-800 mb-8">Entreprises à la une</h3>
+        <div class="flex justify-center items-center space-x-6">
+            <img src="{{ asset('images/vodafone.png') }}" alt="Vodafone" class="h-12">
+            <img src="{{ asset('images/intel.png') }}" alt="Intel" class="h-12">
+            <img src="{{ asset('images/tesla.png') }}" alt="Tesla" class="h-12">
+            <img src="{{ asset('images/amd.png') }}" alt="AMD" class="h-12">
+            <img src="{{ asset('images/talkit.png') }}" alt="Talkit" class="h-12">
         </div>
-        <div class="feature">
-            <h3>Pour les entreprises</h3>
-            <p>Trouvez les meilleurs talents pour vos équipes.</p>
-        </div>
-    </section>
-    <footer class="landing-footer">
-        <p>&copy; 2025 Trouve Ta Boîte. Tous droits réservés.</p>
-    </footer>
-</div>
+    </div>
+</section>
 {% endblock %}
