@@ -109,4 +109,8 @@ class Company extends User implements UserInterface
         return $this->getEmail();
     }
 
+    public function __toString(): string
+    {
+        return $this->name;
+    }
 }
