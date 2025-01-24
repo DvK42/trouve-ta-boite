@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Trouve Ta Boîte - Bienvenue{% endblock %}
+
+{% block body %}
+<div class="landing-container">
+    <header class="landing-header">
+        <h1>Bienvenue sur Trouve Ta Boîte</h1>
+        <p>Découvrez les meilleures offres de stage et d'alternance adaptées à vos besoins !</p>
+        <a href="{{ path('app_login') }}" class="btn btn-primary">Se connecter</a>
+        {# <a href="{{ path('app_register') }}" class="btn btn-secondary">Créer un compte</a> #}
+    </header>
+    <section class="features">
+        <h2>Pourquoi Trouve Ta Boîte ?</h2>
+        <div class="feature">
+            <h3>Pour les étudiants</h3>
+            <p>Explorez des milliers d'opportunités de stage et d'alternance.</p>
+        </div>
+        <div class="feature">
+            <h3>Pour les entreprises</h3>
+            <p>Trouvez les meilleurs talents pour vos équipes.</p>
+        </div>
+    </section>
+    <footer class="landing-footer">
+        <p>&copy; 2025 Trouve Ta Boîte. Tous droits réservés.</p>
+    </footer>
+</div>
+{% endblock %}
