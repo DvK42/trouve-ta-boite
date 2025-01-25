@@ -25,7 +25,15 @@ class OfferRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
-    
+
+    public function findLatestOffers(int $limit = 8): array
+    {
+        return $this->createQueryBuilder('o')
+            ->orderBy('o.startDate', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 //    /**
 //     * @return Offer[] Returns an array of Offer objects
 //     */

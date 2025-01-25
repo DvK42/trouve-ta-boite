@@ -2,11 +2,13 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Company;
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
-use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use App\Entity\Company;
+use Doctrine\Persistence\ObjectManager;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpClient\HttpClient;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class CompanyFixtures extends Fixture implements OrderedFixtureInterface
@@ -21,7 +23,15 @@ class CompanyFixtures extends Fixture implements OrderedFixtureInterface
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
+        $filesystem = new Filesystem();
+        $httpClient = HttpClient::create();
 
+        $targetDirectory = 'assets/images/faker';
+
+        if (!$filesystem->exists($targetDirectory)) {
+            $filesystem->mkdir($targetDirectory);
+        }
+        
         for ($i = 0; $i < 20; $i++) {
             $company = new Company();
             $company->setEmail($faker->unique()->companyEmail);
@@ -30,8 +40,18 @@ class CompanyFixtures extends Fixture implements OrderedFixtureInterface
                 $this->passwordHasher->hashPassword($company, 'password123')
             );
             $company->setName($faker->company);
+            $company->setLocation($faker->city);
             $company->setSector($faker->catchPhrase);
             $company->setDescription($faker->paragraph);
+            $imageUrl = 'https://loremflickr.com/200/200/business';
+            $imageFilename = sprintf('%s/logo_%s.jpg', $targetDirectory, uniqid());
+
+            $response = $httpClient->request('GET', $imageUrl);
+            if ($response->getStatusCode() === 200) {
+                $filesystem->dumpFile($imageFilename, $response->getContent());
+            }
+
+            $company->setLogo(basename($imageFilename)); 
 
             $manager->persist($company);
         }

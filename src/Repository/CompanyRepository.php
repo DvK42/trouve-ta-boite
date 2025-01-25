@@ -16,6 +16,21 @@ class CompanyRepository extends ServiceEntityRepository
         parent::__construct($registry, Company::class);
     }
 
+    public function findTopCompaniesWithActiveOffers(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->select('c, COUNT(o.id) AS HIDDEN offerCount')
+            ->join('c.offers', 'o')
+            ->where('o.startDate <= :today')
+            ->andWhere('o.endDate >= :today')
+            ->setParameter('today', new \DateTime())
+            ->groupBy('c.id')
+            ->orderBy('offerCount', 'DESC')
+            ->setMaxResults(5)
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Company[] Returns an array of Company objects
     //     */

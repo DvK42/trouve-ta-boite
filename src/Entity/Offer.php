@@ -152,6 +152,11 @@ class Offer
         return $this;
     }
 
+    public function getLocation(): ?string
+    {
+        return $this->company ? $this->company->getLocation() : null;
+    }
+    
     /**
      * @return Collection<int, Application>
      */

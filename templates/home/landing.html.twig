@@ -27,11 +27,81 @@
     <div class="container mx-auto text-center">
         <h3 class="text-2xl font-bold text-gray-800 mb-8">Entreprises à la une</h3>
         <div class="flex justify-center items-center space-x-6">
-            <img src="{{ asset('images/vodafone.png') }}" alt="Vodafone" class="h-12">
-            <img src="{{ asset('images/intel.png') }}" alt="Intel" class="h-12">
-            <img src="{{ asset('images/tesla.png') }}" alt="Tesla" class="h-12">
-            <img src="{{ asset('images/amd.png') }}" alt="AMD" class="h-12">
-            <img src="{{ asset('images/talkit.png') }}" alt="Talkit" class="h-12">
+        {% for company in topCompanies %}
+            <div class="bg-white p-4 rounded-lg shadow hover:shadow-md transition">
+                <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ company.name }}</h3>
+                <p class="text-sm text-gray-600 mb-2">
+                    Localisation : {{ company.location }}
+                </p>
+                <p class="text-sm text-gray-700">
+                    Offres actives : {{ company.offers|length }}
+                </p>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="my-18">
+    <div class="container company-bg mx-auto max-w-3/4 ps-18 pe-12 pt-20 pb-0 flex justify-between">
+        <div class="flex flex-col w-2/5 text-white">
+            <h2 class="mb-6 font-semibold text-4xl">
+                Entreprises, déposez vos offres gratuitement
+            </h2>
+            <p class="text-lg mb-6">
+                Vous pourrez gérer votre planning d’accueil et bénéficier de nombreux services intégrés.
+            </p>
+            <a href="#" class="flex items-center btn-white w-fit bg-white py-2 px-4 rounded text-[#4640de]">
+                Créez votre compte
+            </a>
+        </div>
+
+        <div class="lg:w-1/2 self-baseline relative">
+            <img src="{{ asset('build/images/dashboard-company.png') }}" alt="Dashboard" class="rounded-lg shadow-lg">
+        </div>
+    </div>
+</section>
+
+
+<section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-6 lg:px-12">
+        <div class="flex items-center justify-between mb-8">
+            <h2 class="text-3xl font-bold text-gray-900">
+                Dernières <span class="text-blue-500">offres</span>
+            </h2>
+            <a href="#" class="text-blue-500 hover:underline flex items-center space-x-2">
+                <span>Toutes les offres</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {% for offer in lastestOffers %}
+            <div class="bg-white p-4 rounded-lg shadow hover:shadow-md transition">
+                <div class="flex items-center justify-between mb-4">
+                    <img src="{{ asset('build/images/faker/' ~ offer.company.logo) }}" alt="{{ offer.company.name }}" class="h-10 w-10 rounded-full">
+                    <span class="text-sm font-medium text-blue-500 bg-blue-100 px-2 py-1 rounded capitalize">
+                        {{ offer.type }}
+                    </span>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ offer.name }}</h3>
+                <p class="text-sm text-gray-600 mb-4">{{ offer.company.name }} • 
+                {{ offer.getLocation() }}
+                </p>
+                <p class="text-sm text-gray-700 mb-4">
+                    {{ offer.description | slice(0, 50) ~ '...' }}
+                </p>
+                <div class="flex space-x-2">
+                    {% for category in offer.categories %}
+                    <span class="text-xs font-medium text-gray-700 bg-gray-100 px-2 py-1 rounded">
+                        {{ category.name }}
+                    </span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
         </div>
     </div>
 </section>
