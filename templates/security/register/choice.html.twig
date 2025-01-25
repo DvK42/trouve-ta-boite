@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container mx-auto py-10 px-4">
+        <h2 class="text-3xl font-semibold text-grey-dark text-center">Vous êtes</h2>
+        {{ form_start(form, {'attr': {'id': 'type-form', 'class': 'max-w-3/4 mx-auto p-6'}}) }}
+        <div class="w-full mt-16 flex justify-between gap-x-8">
+            {% for child in form.type %}
+                <label class="space-x-3 cursor-pointer w-1/2 border py-6 px-10 rounded-xl flex flex-col justify-start shadow-sm hover:shadow-lg duration-300 min-h-[400px]">
+                {{ form_widget(child, {
+                    'attr': {
+                        'class': 'hidden',
+                        'onchange': 'document.getElementById("type-form").submit();'
+                    }
+                }) }}
+                {% if child.vars.value is same as 'company' %}
+                    <h3 class="text-center text-2xl font-semibold w-full mb-8">Une entreprise</h3>
+                    <img src="{{ asset('build/images/company-blue.jpg') }}" class="w-2/3 opacity-80 self-center mb-8"></img>
+                {% else %}
+                    <h3 class="text-center text-2xl font-semibold w-full mb-8">Un(e) étudant(e)</h3>
+                <img src="{{ asset('build/images/student-blue.jpg') }}" class="w-2/3 opacity-80 self-center mb-8"></img>
+                {% endif %}
+                <ul class="list-style-logo flex flex-col items-start ">
+                    {% if child.vars.value is same as 'company' %}
+                        <li>Poster des offres</li>
+                        <li>Augmentez votre visibilité </li>
+                        <li>Trouvez votre prochain stagiaire ou alternant</li>
+                    {% else %}
+                        <li>Faites vous remarquer</li>
+                        <li>Postulez à des offres</li>
+                        <li>Construisez votre futur !</li>
+                    {% endif %}
+                </ul>
+                </label>
+            {% endfor %}
+        </div>
+        {{ form_rest(form) }}
+        {{ form_end(form) }}
+    </div>
+</div>
+
+<script>
+    // Pour activer un cercle stylisé au clic
+    document.querySelectorAll('#type-form input[type="radio"]').forEach((input) => {
+        input.addEventListener('change', (e) => {
+            document.querySelectorAll('label span.inline-block').forEach((span) => {
+                span.classList.remove('bg-blue-500', 'border-blue-500');
+                span.classList.add('border-gray-300');
+            });
+            e.target.parentElement.querySelector('span.inline-block').classList.add('bg-blue-500', 'border-blue-500');
+        });
+    });
+</script>
+{% endblock %}

@@ -77,10 +77,6 @@ Encore
         from: './assets/images',
         to: 'images/[path][name].[hash:8].[ext]',
     })
-    .copyFiles({
-        from: './assets/images/faker',
-        to: 'images/faker/[path][name].[ext]',
-    })
 ;
 
 module.exports = Encore.getWebpackConfig();
