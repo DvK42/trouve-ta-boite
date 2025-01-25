@@ -7,6 +7,7 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 final class AccessDeniedListener
@@ -27,6 +28,11 @@ final class AccessDeniedListener
         if ($exception instanceof AccessDeniedHttpException) {
 
             $response = new RedirectResponse($this->router->generate('error_403'));
+            $event->setResponse($response);
+        }
+
+        if ($exception instanceof NotFoundHttpException) {
+            $response = new RedirectResponse($this->router->generate('error_404'));
             $event->setResponse($response);
         }
     }
