@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class RegisterCompanyFormType extends AbstractType
@@ -36,13 +37,17 @@ class RegisterCompanyFormType extends AbstractType
                     'accept' => 'image/*',
                     'class' => 'border input-apply',
                 ],
+            ])
+            ->add('_csrf_token', HiddenType::class, [
+                'mapped' => false,
+                'data' => $options['csrf_token'],
             ]);
     }
 
-    // public function configureOptions(OptionsResolver $resolver): void
-    // {
-    //     $resolver->setDefaults([
-    //         'data_class' => Company::class,
-    //     ]);
-    // }
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'csrf_token' => 'authenticate', 
+        ]);
+    }
 }
