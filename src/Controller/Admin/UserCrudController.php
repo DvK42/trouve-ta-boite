@@ -41,9 +41,10 @@ class UserCrudController extends AbstractCrudController
                 return $entity->getDisplayName();
             }),
             TextField::new('email', 'Email'),
-            TextField::new('userType', 'Type d\'utilisateur')->formatValue(function ($value, $entity) {
-                return $entity->getUserTypeString();
-            }),
+            TextField::new('password', 'Mot de passe')->onlyOnForms(), 
+            // TextField::new('userType', 'Type d\'utilisateur')->formatValue(function ($value, $entity) {
+            //     return $entity->getUserTypeString();
+            // }),
         ];
     }
 

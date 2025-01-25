@@ -26,7 +26,7 @@ class CompanyFixtures extends Fixture implements OrderedFixtureInterface
         $filesystem = new Filesystem();
         $httpClient = HttpClient::create();
 
-        $targetDirectory = 'assets/images/faker';
+        $targetDirectory = 'assets/images/uploads';
 
         if (!$filesystem->exists($targetDirectory)) {
             $filesystem->mkdir($targetDirectory);
@@ -42,7 +42,7 @@ class CompanyFixtures extends Fixture implements OrderedFixtureInterface
             $company->setName($faker->company);
             $company->setLocation($faker->city);
             $company->setSector($faker->catchPhrase);
-            $company->setDescription($faker->paragraph);
+            $company->setDescription($faker->paragraph(1));
             $imageUrl = 'https://loremflickr.com/200/200/business';
             $imageFilename = sprintf('%s/logo_%s.jpg', $targetDirectory, uniqid());
 

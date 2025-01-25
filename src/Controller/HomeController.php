@@ -18,17 +18,12 @@ class HomeController extends AbstractController
         $offers = $offerRepository->findLatestOffers();
         $topCompanies = $companyRepository->findTopCompaniesWithActiveOffers();
 
-        if ($this->getUser()) {
-            return $this->render('home/connected.html.twig', [
-                'user' => $this->getUser(),
-            ]);
-        }
-
         return $this->render('home/landing.html.twig', [
             'countStages' => $countStages,
             'countAlternances' => $countAlternances,
             'lastestOffers' => $offers,
             'topCompanies' => $topCompanies,
+            'user' => $this->getUser(),
         ]);
     }
 }

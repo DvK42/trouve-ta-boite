@@ -1,10 +1,35 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="container">
-    <h1>Créer une entreprise</h1>
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
+<div class="container mx-auto py-10 px-4">
+    {{ form_start(form, {'attr': {'id': 'type-form', 'class': 'mt-16 flex flex-col justify-between gap-x-8 w-full'}}) }}
+        <div class="flex justify-between mb-8">
+            <div class="w-6/12 mr-4 border-r">
+            <p class="text-xl font-semibold text-grey-dark text-center mb-8">Votre identité</p>
+                <div class="flex flex-col items-center justify-between gap-y-8">
+                    <div class="flex flex-col justify-between w-2/3 gap-x-3">
+                    {{ form_row(form.email, {'attr': {'class': 'border flex flex-col input-apply w-full'}}) }}
+                    {{ form_row(form.password, {'attr': {'class': 'border flex flex-col input-apply w-full'}}) }}
+                    {{ form_row(form.logo, {'attr': {'class': 'border flex flex-col input-apply w-full'}}) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-6/12 ml-4">
+                <p class="text-xl font-semibold text-grey-dark text-center mb-8">Votre organisation</p>
+                <div class="flex flex-col justify-between items-center gap-y-8">
+                    <div class="flex flex-col justify-between w-2/3 gap-x-3">
+                        {{ form_row(form.name, {'attr': {'class': 'border flex flex-col input-apply w-full'}}) }}
+                        {{ form_row(form.location, {'attr': {'class': 'border flex flex-col input-apply w-full'}}) }}
+                        {{ form_row(form.sector, {'attr': {'class': 'border flex flex-col input-apply w-full'}}) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-blue-dark w-fit self-end">Créer mon compte</button>
+        {{ form_rest(form) }}
     {{ form_end(form) }}
+    </form>
 </div>
 {% endblock %}

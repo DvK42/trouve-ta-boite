@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -42,10 +43,9 @@ class SecurityController extends AbstractController
     #[Route(path: '/register', name: 'app_register')]
     public function register(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
-        $step = $request->get('step', 1); // Étape actuelle
-        $type = $request->get('type'); // Type sélectionné
-
-        // Étape 1 : Choix du type
+        $step = $request->get('step', 1); 
+        $type = $request->get('type'); 
+        
         if ($step == 1) {
             $form = $this->createForm(RegisterChoiceFormType::class);
             $form->handleRequest($request);
@@ -60,7 +60,6 @@ class SecurityController extends AbstractController
             ]);
         }
 
-        // Étape 2 : Création spécifique
         if ($step == 2) {
             if ($type === 'student') {
                 $student = new Student();
@@ -88,13 +87,31 @@ class SecurityController extends AbstractController
                 $form->handleRequest($request);
 
                 if ($form->isSubmitted() && $form->isValid()) {
-                    // Créer le premier utilisateur pour la société
-                    // $user = new User();
+
+                    $company = $form->getData();
+
                     $company->setEmail($form->get('email')->getData());
                     $hashedPassword = $passwordHasher->hashPassword($company, $form->get('password')->getData());
                     $company->setPassword($hashedPassword);
                     $company->setRoles(['ROLE_COMPANY']);
-                    // $company->setCompany($company);
+
+                    /** @var UploadedFile $logoFile */
+                    $logoFile = $form->get('logo')->getData();
+
+                    if ($logoFile) {
+                        $newFilename = uniqid() . '.' . $logoFile->guessExtension();
+
+                        try {
+                            $logoFile->move(
+                                $this->getParameter('logos_directory'),
+                                $newFilename
+                            );
+
+                            $company->setLogo($newFilename);
+                        } catch (FileException $e) {
+                            $this->addFlash('danger', 'Erreur lors de l\'upload du logo.');
+                        }
+                    }
 
                     $entityManager->persist($company);
                     $entityManager->persist($company);

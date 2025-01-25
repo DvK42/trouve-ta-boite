@@ -28,6 +28,6 @@ yarn-error.log
 
 ###> symfony/asset-mapper ###
 /public/assets/
-/assets/images/faker/
+/assets/images/uploads/
 /assets/vendor/
 ###< symfony/asset-mapper ###
