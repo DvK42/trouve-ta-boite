@@ -47,6 +47,7 @@
     </div>
 </section>
 
+{% if app.user is null %}
 <section class="my-18">
     <div class="container company-bg mx-auto max-w-3/4 ps-18 pe-12 pt-20 pb-0 flex justify-between">
         <div class="flex flex-col w-2/5 text-white">
@@ -66,7 +67,7 @@
         </div>
     </div>
 </section>
-
+{% endif %}
 
 <section class="py-16 bg-gray-50">
     <div class="container mx-auto px-6 lg:px-12">
