@@ -11,6 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class RegisterStudentFormType extends AbstractType
@@ -43,6 +44,10 @@ class RegisterStudentFormType extends AbstractType
                 'label' => 'Niveau actuel',
                 'required' => true,
                 ])
+                ->add('_csrf_token', HiddenType::class, [
+                'mapped' => false,
+                'data' => $options['csrf_token'],
+            ]);
                 // ->add('skills', EntityType::class, [
                 //     'class' => Skill::class, // L'entité qui contient les compétences
                 //     'choice_label' => 'name', // L'attribut de l'entité utilisé comme label
@@ -54,13 +59,12 @@ class RegisterStudentFormType extends AbstractType
                 //         'class' => 'border input-apply w-full', // Classes CSS personnalisées
                 //     ],
                 // ])
-        ;
     }
 
-    // public function configureOptions(OptionsResolver $resolver): void
-    // {
-    //     $resolver->setDefaults([
-    //         'data_class' => Student::class,
-    //     ]);
-    // }
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'csrf_token' => 'authenticate', 
+        ]);
+    }
 }
