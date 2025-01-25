@@ -46,6 +46,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
         $company->setRoles(['ROLE_COMPANY']);
         $company->setPassword($this->passwordHasher->hashPassword($company, 'company123'));
         $company->setName('TechCorp');
+        $company->setLocation('Paris');
         $company->setSector('Technology');
         $company->setDescription('A leading tech company.');
         $manager->persist($company);

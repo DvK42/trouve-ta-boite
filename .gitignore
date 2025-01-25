@@ -25,3 +25,9 @@
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
+
+###> symfony/asset-mapper ###
+/public/assets/
+/assets/images/faker/
+/assets/vendor/
+###< symfony/asset-mapper ###
