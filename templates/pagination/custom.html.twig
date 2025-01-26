@@ -1,0 +1,33 @@
+<div class="flex justify-center mt-6">
+	<ul class="inline-flex items-center space-x-2">
+		{% if previous is defined %}
+			<li>
+				<a href="{{ path(route, query|merge({ (pageParameterName): previous })) }}" class="bg-gray-200 text-gray-700 hover:bg-blue-600 hover:text-white px-4 py-2 rounded-lg">
+					&laquo;
+				</a>
+			</li>
+		{% endif %}
+
+		{% for page in pagesInRange %}
+			{% if page == current %}
+				<li>
+					<span class="bg-blue-600 text-white px-4 py-2 rounded-lg">{{ page }}</span>
+				</li>
+			{% else %}
+				<li>
+					<a href="{{ path(route, query|merge({ (pageParameterName): page })) }}" class="bg-gray-200 text-gray-700 hover:bg-blue-600 hover:text-white px-4 py-2 rounded-lg">
+						{{ page }}
+					</a>
+				</li>
+			{% endif %}
+		{% endfor %}
+
+		{% if current < pageCount %}
+			<li>
+				<a href="{{ path(route, query|merge({ (pageParameterName): current + 1 })) }}" class="bg-gray-200 text-gray-700 hover:bg-blue-600 hover:text-white px-4 py-2 rounded-lg">
+					&raquo;
+				</a>
+			</li>
+		{% endif %}
+	</ul>
+</div>
