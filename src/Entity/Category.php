@@ -2,9 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\CategoryRepository;
+use App\Entity\Offer;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CategoryRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 class Category
@@ -20,9 +23,16 @@ class Category
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\ManyToOne(inversedBy: 'categories')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Offer $offerId = null;
+    /**
+     * @var Collection<int, Offer>
+     */
+    #[ORM\ManyToMany(targetEntity: Offer::class, mappedBy: 'categories')]
+    private Collection $offers;
+
+    public function __construct()
+    {
+        $this->offers = new ArrayCollection();
+    }
 
     public const CATEGORIES = [
         'Informatique',
@@ -66,14 +76,26 @@ class Category
         return $this;
     }
 
-    public function getOfferId(): ?Offer
+    /**
+     * @return Collection<int, Offer>
+     */
+    public function getOffers(): Collection
     {
-        return $this->offerId;
+        return $this->offers;
     }
 
-    public function setOfferId(?Offer $offerId): static
+    public function addOffer(Offer $offer): self
     {
-        $this->offerId = $offerId;
+        if (!$this->offers->contains($offer)) {
+            $this->offers->add($offer);
+        }
+
+        return $this;
+    }
+
+    public function removeOffer(Offer $offer): self
+    {
+        $this->offers->removeElement($offer);
 
         return $this;
     }
