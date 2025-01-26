@@ -34,6 +34,12 @@ class Offer
     #[ORM\Column(nullable: true)]
     private ?float $salary = null;
 
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    private array $missionList = [];
+
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    private array $profileSearchedList = [];
+
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $maxApplyDate = null;
 
@@ -76,6 +82,8 @@ class Offer
         $this->applications = new ArrayCollection();
         $this->skills = new ArrayCollection();
         $this->categories = new ArrayCollection();
+        $this->missionList = new ArrayCollection();
+        $this->profileSearchedList = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -151,6 +159,82 @@ class Offer
     public function setSalary(?float $salary): static
     {
         $this->salary = $salary;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMissionList(): array
+    {
+        return $this->missionList;
+    }
+
+    /**
+     * @param array $missionList
+     */
+    public function setMissionList(array $missionList): self
+    {
+        $this->missionList = $missionList;
+
+        return $this;
+    }
+
+    public function addMission(string $mission): self
+    {
+        if (!in_array($mission, $this->missionList, true)) {
+            $this->missionList[] = $mission;
+        }
+
+        return $this;
+    }
+
+    public function removeMission(string $mission): self
+    {
+        $index = array_search($mission, $this->missionList, true);
+        if ($index !== false) {
+            unset($this->missionList[$index]);
+            $this->missionList = array_values($this->missionList); // Réindexer l'array
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getProfileSearchedList(): array
+    {
+        return $this->profileSearchedList;
+    }
+
+    /**
+     * @param array $missions
+     */
+    public function setProfileSearchedList(array $profileSearchedList): self
+    {
+        $this->profileSearchedList = $profileSearchedList;
+
+        return $this;
+    }
+
+    public function addProfileSearched(string $profileSearched): self
+    {
+        if (!in_array($profileSearched, $this->profileSearchedList, true)) {
+            $this->profileSearchedList[] = $profileSearched;
+        }
+
+        return $this;
+    }
+
+    public function removeProfileSearched(string $profileSearched): self
+    {
+        $index = array_search($profileSearched, $this->profileSearchedList, true);
+        if ($index !== false) {
+            unset($this->profileSearchedList[$index]);
+            $this->profileSearchedList = array_values($this->profileSearchedList); // Réindexer l'array
+        }
 
         return $this;
     }
