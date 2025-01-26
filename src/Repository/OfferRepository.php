@@ -43,37 +43,16 @@ class OfferRepository extends ServiceEntityRepository
             ->getQuery()
             ->setCacheable(false);
     }
-    
-    // public function findAlternances()
-    // {
-    //     return $this->createQueryBuilder('o')
-    //         ->where('o.type = :type')
-    //         ->setParameter('type', 'alternance')
-    //         ->getQuery()
-    //         ->setCacheable(false);
-    // }
-//    /**
-//     * @return Offer[] Returns an array of Offer objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('o')
-//            ->andWhere('o.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('o.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
 
-//    public function findOneBySomeField($value): ?Offer
-//    {
-//        return $this->createQueryBuilder('o')
-//            ->andWhere('o.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findSimilarOffers(string $type, int $excludeId, int $limit)
+    {
+        return $this->createQueryBuilder('o')
+            ->where('o.type = :type')
+            ->andWhere('o.id != :excludeId')
+            ->setParameter('type', $type)
+            ->setParameter('excludeId', $excludeId)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 }

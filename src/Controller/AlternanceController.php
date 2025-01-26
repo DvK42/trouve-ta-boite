@@ -36,18 +36,4 @@ class AlternanceController extends AbstractController
             'totalAlternances' => $totalAlternances,
         ]);
     }
-
-    #[Route('/alternance/{id}', name: 'app_alternance_detail')]
-    public function detail($id, OfferRepository $offerRepository): Response
-    {
-        $alternance = $offerRepository->find($id);
-
-        if (!$alternance) {
-            throw $this->createNotFoundException('Alternance non trouvé');
-        }
-
-        return $this->render('alternance/detail.html.twig', [
-            'alternance' => $alternance,
-        ]);
-    }
 }
