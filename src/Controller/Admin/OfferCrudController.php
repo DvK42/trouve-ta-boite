@@ -39,8 +39,9 @@ class OfferCrudController extends AbstractCrudController
             DateField::new('startDate', 'Date de début'),
             DateField::new('endDate', 'Date de fin'),
             MoneyField::new('salary', 'Salaire')->setCurrency('EUR')->hideOnIndex(),
-            
-            ArrayField::new('categories', 'Catégories')->onlyOnIndex(),
+
+            AssociationField::new('categories', 'Catégories') 
+                ->setFormTypeOption('by_reference', false), 
         ];
     }
 }

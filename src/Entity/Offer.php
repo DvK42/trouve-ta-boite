@@ -67,7 +67,8 @@ class Offer
     /**
      * @var Collection<int, Category>
      */
-    #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'offerId')]
+    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'offers')]
+    #[ORM\JoinTable(name: 'offer_category')]
     private Collection $categories;
 
     public function __construct()
@@ -269,7 +270,7 @@ class Offer
     {
         if (!$this->categories->contains($category)) {
             $this->categories->add($category);
-            $category->setOfferId($this);
+            $category->addOffer($this);
         }
 
         return $this;
@@ -278,9 +279,8 @@ class Offer
     public function removeCategory(Category $category): static
     {
         if ($this->categories->removeElement($category)) {
-            // set the owning side to null (unless already changed)
-            if ($category->getOfferId() === $this) {
-                $category->setOfferId(null);
+            if ($category->getOffers() === $this) {
+                $category->addOffer($this);
             }
         }
 
