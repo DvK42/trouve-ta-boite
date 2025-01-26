@@ -35,14 +35,23 @@ class OfferRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findStages()
+    public function findByType($type)
     {
         return $this->createQueryBuilder('o')
             ->where('o.type = :type')
-            ->setParameter('type', 'stage')
+            ->setParameter('type', $type)
             ->getQuery()
             ->setCacheable(false);
     }
+    
+    // public function findAlternances()
+    // {
+    //     return $this->createQueryBuilder('o')
+    //         ->where('o.type = :type')
+    //         ->setParameter('type', 'alternance')
+    //         ->getQuery()
+    //         ->setCacheable(false);
+    // }
 //    /**
 //     * @return Offer[] Returns an array of Offer objects
 //     */
