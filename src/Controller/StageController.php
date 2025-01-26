@@ -14,21 +14,19 @@ class StageController extends AbstractController
     #[Route('/stage', name: 'app_stage_list')]
     public function index(OfferRepository $offerRepository, PaginatorInterface $paginator, Request $request): Response
     {
-        // Récupérer tous les stages depuis la base de données
-        $query = $offerRepository->findStages();
+        $query = $offerRepository->findByType('stage');
 
-        // Ajouter la pagination
         $pagination = $paginator->paginate(
-            $query, // La requête
-            $request->query->getInt('p', 1), // Numéro de la page actuelle
-            9 // Nombre d'éléments par page
+            $query,
+            $request->query->getInt('p', 1),
+            9
         );
 
         foreach ($pagination->getItems() as $stage) {
             $startDate = $stage->getStartDate();
             $endDate = $stage->getEndDate();
-            $duration = $startDate->diff($endDate)->days; // Calcul de la durée en jours
-            $stage->duration = $duration; // Stocker temporairement la durée
+            $duration = $startDate->diff($endDate)->days;
+            $stage->duration = $duration;
         }
 
         $totalStages = $pagination->getTotalItemCount();

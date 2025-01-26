@@ -3,7 +3,7 @@
 {% block body %}
 	<div class="text-center mb-8 py-20 bg-gray-200">
 		<h1 class="text-3xl font-bold text-gray-800 mb-4">Offres de
-			<span class="text-blue-600 underline">stage</span>
+			<span class="text-blue-600 underline">stages</span>
 		</h1>
 		<p class="text-gray-600">Découvrez les offres de stages actuellement proposées par les entreprises</p>
 	</div>
@@ -33,8 +33,13 @@
 								{{ stage.endDate|date('d/m/Y') }}
 								(
 								{{stage.duration}}
-								jours restants )
+								jours )
 							</span>
+							{% if stage.duration > 44 %}&bull;
+								<span class="text-sm text-blue-600 font-semibold">
+									Rémunéré</span>
+							{% endif %}
+
 							<div class="mt-2 flex gap-2">
 								<span class="bg-blue-100 text-blue-600 px-2 py-1 rounded-lg text-sm font-medium">Stage</span>
 								{% for category in stage.categories %}
