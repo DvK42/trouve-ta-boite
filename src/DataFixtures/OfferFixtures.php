@@ -28,6 +28,18 @@ class OfferFixtures extends Fixture implements OrderedFixtureInterface
             $offer->setCreatedAt($createdAt);
             $offer->setMaxApplyDate($maxApplyDate);
 
+            $missions = [];
+            for ($j = 0; $j < mt_rand(3, 5); $j++) {
+                $missions[] = $faker->sentence(mt_rand(6, 12));
+            }
+            $offer->setMissionList($missions);
+            
+            $profileSearched = [];
+            for ($j = 0; $j < mt_rand(3, 5); $j++) {
+                $profileSearched[] = $faker->sentence(mt_rand(6, 12));
+            }
+            $offer->setProfileSearchedList($profileSearched);
+
             $startDate = $faker->dateTimeBetween('-1 month', '+1 month');
             $endDate = $faker->dateTimeBetween($startDate, '+8 months');
             $offer->setStartDate($startDate);
