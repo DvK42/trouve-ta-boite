@@ -165,6 +165,11 @@ class Offer
         return $this->applications;
     }
 
+    public function getApplicationsCount(): int
+{
+    return $this->applications->count();
+}
+
     public function addApplication(Application $application): static
     {
         if (!$this->applications->contains($application)) {
