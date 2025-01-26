@@ -22,6 +22,12 @@ class OfferFixtures extends Fixture implements OrderedFixtureInterface
             $type = $faker->randomElement(['stage', 'alternance']);
             $offer->setType($type);
 
+            $createdAt = $faker->dateTimeBetween('-1 month', 'now');
+            $maxApplyDate = (clone $createdAt)->modify('+2 months');
+
+            $offer->setCreatedAt($createdAt);
+            $offer->setMaxApplyDate($maxApplyDate);
+
             $startDate = $faker->dateTimeBetween('-1 month', '+1 month');
             $endDate = $faker->dateTimeBetween($startDate, '+8 months');
             $offer->setStartDate($startDate);

@@ -34,6 +34,20 @@ class Offer
     #[ORM\Column(nullable: true)]
     private ?float $salary = null;
 
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $maxApplyDate = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $createdAt = null;
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        if (!$this->createdAt) {
+            $this->createdAt = new \DateTime();
+        }
+    }
+    
     #[ORM\ManyToOne(inversedBy: 'offers')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Company $company = null;
@@ -136,6 +150,30 @@ class Offer
     public function setSalary(?float $salary): static
     {
         $this->salary = $salary;
+
+        return $this;
+    }
+
+    public function getMaxApplyDate(): ?\DateTimeInterface
+    {
+        return $this->maxApplyDate;
+    }
+
+    public function setMaxApplyDate(?\DateTimeInterface $maxApplyDate): self
+    {
+        $this->maxApplyDate = $maxApplyDate;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }
