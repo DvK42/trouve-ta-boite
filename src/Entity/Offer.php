@@ -82,8 +82,6 @@ class Offer
         $this->applications = new ArrayCollection();
         $this->skills = new ArrayCollection();
         $this->categories = new ArrayCollection();
-        $this->missionList = new ArrayCollection();
-        $this->profileSearchedList = new ArrayCollection();
     }
 
     public function getId(): ?int

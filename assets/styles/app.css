@@ -100,3 +100,7 @@ body {
   box-sizing: border-box;
   max-width: calc(25% - 24px);
 }
+
+.list-img-check {
+  list-style-image: url("../Images/Icons/check-green.svg");
+}

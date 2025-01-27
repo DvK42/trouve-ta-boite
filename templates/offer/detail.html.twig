@@ -26,7 +26,11 @@
 								</div>
 								<div class="flex justify-start items-center flex-wrap gap-2 ml-2">
 									{% for category in offer.categories %}
-										{{dump(category)}}
+										<span class="px-2 py-1 rounded-lg text-sm font-medium" style="background-color:
+																																																																																																												{{ category.color|hex_to_rgba(0.2)}}; color:
+																																																																																																												{{ category.color }};">
+											{{ category.name }}
+										</span>
 									{% endfor %}
 								</div>
 							</div>
@@ -55,6 +59,29 @@
 				{% endif %}
 				<p>{{offer.description}}</p>
 			</div>
+
+			<div class="mb-10">
+				<h2 class="font-semibold mb-4 text-[32px] text-grey-dark">Missions</h2>
+				<ul class="list-img-check">
+					{% for mission in offer.missionList %}
+						<li class="ms-8">{{ mission }}</li>
+					{% else %}
+						<li class="ms-8">Aucune mission définie</li>
+					{% endfor %}
+				</ul>
+			</div>
+
+			<div class="mb-10">
+				<h2 class="font-semibold mb-4 text-[32px] text-grey-dark">Profil recherché</h2>
+				<ul class="list-img-check">
+					{% for profileSearched in offer.profileSearchedList %}
+						<li class="ms-8">{{ profileSearched }}</li>
+					{% else %}
+						<li class="ms-8">Aucun profil recherché défini</li>
+					{% endfor %}
+				</ul>
+			</div>
+
 			{% if app.user is not null and app.user.userTypeString is same as 'Etudiant' %}
 				<div class="flex gap-x-8">
 					<div class="flex items-center text-white font-bold bg-blue-600 hover:bg-blue-700 transition">
@@ -62,6 +89,7 @@
 					</div>
 				</div>
 			{% endif %}
+
 		</div>
 		<div class="w-1/3">
 			<div class="pb-10">
@@ -69,6 +97,16 @@
 					<div class="flex justify-between">
 						<span>Type d’offre</span>
 						<span class="font-semibold capitalize text-blue-dark">{{offer.type}}</span>
+					</div>
+					<div class="flex justify-between">
+						<span>Postulet avant le
+						</span>
+						<span class="font-semibold capitalize text-blue-dark">{{offer.maxApplyDate|date('d/m/Y')}}</span>
+
+					</div>
+					<div class="flex justify-between">
+						<span>Offre publiée le</span>
+						<span class="font-semibold capitalize text-blue-dark">{{offer.createdAt|date('d/m/Y')}}</span>
 					</div>
 					<div class="flex justify-between">
 						<span>Gratification</span>
@@ -93,12 +131,35 @@
 			</div>
 
 			<div class="py-10 border-t">
+				<h2 class="text-blue-dark text-2xl font-semibold mb-6">Profils métiers</h2>
+				{% if offer.categories is defined %}
+					<div class="flex justify-start items-center flex-wrap gap-2 ms-2">
+						{% for category in offer.categories %}
+							<span class="px-2 py-1 rounded-lg text-sm font-medium" style="background-color:
+																																																																																								{{ category.color|hex_to_rgba(0.2)}}; color:
+																																																																																								{{ category.color }};">
+								{{ category.name }}
+							</span>
+						{% else %}
+							<span class="ps-4">Non renseigné</span>
+						{% endfor %}
+					</div>
+				{% else %}
+					<span class="ps-4">Non renseigné</span>
+				{% endif %}
+			</div>
+
+			<div class="py-10 border-t">
 				<h2 class="text-blue-dark text-2xl font-semibold mb-6">Compétences recherchées</h2>
-				{% if offer.categories is not empty %}
-					<div class="flex flex-wrap justify-start gap-2">
-						{offer.skills.map((skill) => (
-						<Skill skill={skill}/>
-						))}
+				{% if offer.skills is defined %}
+					<div class="flex flex-wrap justify-start gap-2 ms-2">
+						{% for skill in offer.skills %}
+							<span class="px-2 py-1 rounded-lg text-sm font-medium bg-blue-100 text-blue-700">{{ skill.name }}</span>
+
+
+						{% else %}
+							<span class="ps-4">Non renseigné</span>
+						{% endfor %}
 					</div>
 				{% else %}
 					<span class="ps-4">Non renseigné</span>
@@ -109,10 +170,10 @@
 
 	<div class="mt-18 container mx-auto">
 		<div
-			class="flex flex-row items-center gap-x-8">
+			class="flex flex-row items-center gap-x-8 mb-8">
 			{# <a href="{{ path('app_company_detail', {id: offer.company.id})}}"> #}
-			<img alt={{offer.company.name}} src="{{ asset('build/images/uploads/' ~ offer.company.logo) }}" class="max-w-20 mb-8"></img>
-		<span>{{offer.company.name}}</span>
+			<img alt={{offer.company.name}} src="{{ asset('build/images/uploads/' ~ offer.company.logo) }}" class="max-w-20"></img>
+		<span class="text-2xl font-bold">{{offer.company.name}}</span>
 		{# </a> #}
 	</div>
 	<p class="mb-8">
