@@ -28,12 +28,22 @@ class SkillFixtures extends Fixture implements OrderedFixtureInterface
 
         $students = $manager->getRepository(Student::class)->findAll();
         foreach ($students as $student) {
-            $student->getSkills()->add(...$faker->randomElements($skills, mt_rand(2, 5)));
+            $randomSkills = $faker->randomElements($skills, mt_rand(1, 3));
+            foreach ($randomSkills as $skill) {
+                $student->addSkill($skill); 
+            }
+
+            $manager->persist($student);
         }
 
         $offers = $manager->getRepository(Offer::class)->findAll();
         foreach ($offers as $offer) {
-            $offer->getSkills()->add(...$faker->randomElements($skills, mt_rand(3, 7)));
+            $randomSkills = $faker->randomElements($skills, mt_rand(1, 3));
+            foreach ($randomSkills as $skill) {
+                $offer->addSkill($skill); 
+            }
+
+            $manager->persist($offer);
         }
 
         $manager->flush();

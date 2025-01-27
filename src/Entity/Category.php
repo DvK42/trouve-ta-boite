@@ -20,8 +20,8 @@ class Category
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $description = null;
+    #[ORM\Column(type: 'string', length: 7, nullable: false)]
+    private ?string $color = null;
 
     /**
      * @var Collection<int, Offer>
@@ -64,18 +64,18 @@ class Category
         return $this;
     }
 
-    public function getDescription(): ?string
+     public function getColor(): ?string
     {
-        return $this->description;
+        return $this->color;
     }
 
-    public function setDescription(?string $description): static
+    public function setColor(string $color): self
     {
-        $this->description = $description;
+        $this->color = $color;
 
         return $this;
     }
-
+    
     /**
      * @return Collection<int, Offer>
      */
