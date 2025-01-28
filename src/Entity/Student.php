@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: StudentRepository::class)]
 #[ORM\DiscriminatorMap(["student" => "Student"])]
@@ -28,6 +29,37 @@ class Student extends User implements UserInterface
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $education = null;
+
+    #[ORM\Column(length: 10)]
+    #[Assert\Choice(choices: ['homme', 'femme', 'autre'], message: 'Le genre doit être "homme", "femme" ou "autre".')]
+    private ?string $gender = null;
+
+    #[ORM\Column(type: 'date', nullable: true)]
+    private ?\DateTimeInterface $dateOfBirth = null;
+
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $phone = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $address = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $addressComplement = null;
+
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $city = null;
+
+    #[ORM\Column(length: 10, nullable: true)]
+    private ?string $postalCode = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $portfolioUrl = null;
+
+    #[ORM\Column(type: 'boolean')]
+    private bool $isDriver = false;
+
+    #[ORM\Column(type: 'boolean')]
+    private bool $isHandicap = false;
 
     /**
      * @var Collection<int, Application>
@@ -77,6 +109,126 @@ class Student extends User implements UserInterface
         return $this;
     }
 
+    public function getGender(): ?string
+    {
+        return $this->gender;
+    }
+
+    public function setGender(string $gender): static
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    public function getDateOfBirth(): ?\DateTimeInterface
+    {
+        return $this->dateOfBirth;
+    }
+
+    public function setDateOfBirth(?\DateTimeInterface $dateOfBirth): static
+    {
+        $this->dateOfBirth = $dateOfBirth;
+
+        return $this;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(?string $phone): static
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?string $address): static
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    public function getAddressComplement(): ?string
+    {
+        return $this->addressComplement;
+    }
+
+    public function setAddressComplement(?string $addressComplement): static
+    {
+        $this->addressComplement = $addressComplement;
+
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(?string $city): static
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function getPostalCode(): ?string
+    {
+        return $this->postalCode;
+    }
+
+    public function setPostalCode(?string $postalCode): static
+    {
+        $this->postalCode = $postalCode;
+
+        return $this;
+    }
+
+    public function getPortfolioUrl(): ?string
+    {
+        return $this->portfolioUrl;
+    }
+
+    public function setPortfolioUrl(?string $portfolioUrl): static
+    {
+        $this->portfolioUrl = $portfolioUrl;
+
+        return $this;
+    }
+
+    public function isDriver(): bool
+    {
+        return $this->isDriver;
+    }
+
+    public function setIsDriver(bool $isDriver): static
+    {
+        $this->isDriver = $isDriver;
+
+        return $this;
+    }
+
+    public function isHandicap(): bool
+    {
+        return $this->isHandicap;
+    }
+
+    public function setIsHandicap(bool $isHandicap): static
+    {
+        $this->isHandicap = $isHandicap;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Application>
      */
@@ -98,7 +250,6 @@ class Student extends User implements UserInterface
     public function removeApplication(Application $application): static
     {
         if ($this->applications->removeElement($application)) {
-            // set the owning side to null (unless already changed)
             if ($application->getStudentId() === $this) {
                 $application->setStudentId(null);
             }

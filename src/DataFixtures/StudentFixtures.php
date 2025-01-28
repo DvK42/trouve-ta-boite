@@ -21,10 +21,10 @@ class StudentFixtures extends Fixture implements OrderedFixtureInterface
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
-        
+
         for ($i = 0; $i < 50; $i++) {
             $student = new Student();
-            
+
             $student->setEmail($faker->unique()->email);
             $student->setRoles(['ROLE_STUDENT']);
             $student->setPassword(
@@ -33,13 +33,29 @@ class StudentFixtures extends Fixture implements OrderedFixtureInterface
             $student->setFirstName($faker->firstName);
             $student->setLastName($faker->lastName);
             $student->setEducation($faker->randomElement(['Computer Science', 'Engineering', 'Business Management', 'Mathematics']));
-            
+
+            $student->setGender($faker->randomElement(['homme', 'femme', 'autre']));
+
+            $student->setDateOfBirth($faker->dateTimeBetween('-30 years', '-20 years'));
+
+            $student->setPhone($faker->phoneNumber);
+            $student->setAddress($faker->streetAddress);
+            $student->setAddressComplement($faker->optional()->secondaryAddress);
+            $student->setCity($faker->city);
+            $student->setPostalCode($faker->postcode);
+
+            $student->setPortfolioUrl($faker->optional()->url);
+
+            $student->setIsDriver($faker->boolean(50));
+
+            $student->setIsHandicap($faker->boolean(10));
+
             $manager->persist($student);
         }
 
         $manager->flush();
     }
-    
+
     public function getOrder(): int
     {
         return 2; 

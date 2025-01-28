@@ -38,6 +38,16 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
         $student->setFirstName('John');
         $student->setLastName('Doe');
         $student->setEducation('Computer Science');
+        $student->setGender('homme'); 
+        $student->setDateOfBirth(new \DateTime('1995-05-15')); 
+        $student->setPhone('0612345678'); 
+        $student->setAddress('123 Rue Exemple'); 
+        $student->setAddressComplement('Appartement 4B'); 
+        $student->setCity('Paris'); 
+        $student->setPostalCode('75001'); 
+        $student->setPortfolioUrl('https:portfolio.com');
+        $student->setIsDriver(true); 
+        $student->setIsHandicap(false); 
         $manager->persist($student);
 
         // Créer une entreprise
