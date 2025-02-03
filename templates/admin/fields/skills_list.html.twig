@@ -1,0 +1,15 @@
+
+{% if field.value|length > 0 %}
+	<ul>
+		{% for skill in field.value %}
+			<li>
+				<span style="text-transform: capitalize">{{skill.name}}</span>
+				<a href="{{ path('admin', { entity: 'Skill', action: 'show', id: skill.id }) }}" style="margin-left: 10px">Voir les détails</a>
+
+			</li>
+		{% endfor %}
+	</ul>
+{% else %}
+	<p>Aucune compétence.</p>
+{% endif %}
+

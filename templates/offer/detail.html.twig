@@ -39,9 +39,15 @@
 
 					{% if app.user is not null and app.user.userTypeString is same as 'Etudiant' %}
 						<div class="flex gap-x-8">
+							{% if hasApplied %}
+								<div class="text-green-600 font-bold">
+									Vous avez déjà postulé à cette offre.
+								</div>
+							{% else %}
 							<div class="flex items-center text-white font-bold bg-blue-600 hover:bg-blue-700 transition">
 								<a href="{{ path('app_offer_apply', { id: offer.id, type: offer.type }) }}" class="px-14 py-4">Postuler</a>
 							</div>
+							{% endif %}
 						</div>
 					{% endif %}
 				</div>
@@ -82,13 +88,21 @@
 				</ul>
 			</div>
 
-			{% if app.user is not null and app.user.userTypeString is same as 'Etudiant' %}
-				<div class="flex gap-x-8">
-					<div class="flex items-center text-white font-bold bg-blue-600 hover:bg-blue-700 transition">
-						<a href="{{ path('app_offer_apply', { id: offer.id, type: offer.type }) }}" class="px-14 py-4">Postuler</a>
-					</div>
+			{% if hasApplied %}
+				<div class="text-green-600 font-bold">
+					Vous avez déjà postulé à cette offre.
 				</div>
+			{% else %}
+				{% if app.user is not null and app.user.userTypeString is same as 'Etudiant' %}
+					<div class="flex gap-x-8">
+						<div class="flex items-center text-white font-bold bg-blue-600 hover:bg-blue-700 transition">
+							<a href="{{ path('app_offer_apply', { id: offer.id, type: offer.type }) }}" class="px-14 py-4">Postuler</a>
+						</div>
+					</div>
+				{% endif %}
 			{% endif %}
+
+
 
 		</div>
 		<div class="w-1/3">
@@ -125,8 +139,12 @@
 					<div class="flex justify-between">
 						<span>Candidatures déposées</span>
 						<span class="font-semibold text-blue-dark">{{applicationsCount}}</span>
-
 					</div>
+					{% if hasApplied %}
+						<div class="text-green-600 font-bold">
+							Vous avez déjà postulé à cette offre.
+						</div>
+					{% endif %}
 				</div>
 			</div>
 

@@ -1,0 +1,18 @@
+{% if field.value|length > 0 %}
+	<ul>
+		{% for application in field.value %}
+			<li>
+				<strong>Offre :</strong>
+				<span style="text-transform: capitalize">{{application.offerId.type}}</span>
+				-
+				{{ application.offerId.name }}
+				-
+				{{application.offerId.company.name}}
+				<a href="{{ path('admin', { entity: 'Application', action: 'show', id: application.id }) }}" style="margin-left: 10px">Voir les détails</a>
+
+			</li>
+		{% endfor %}
+	</ul>
+{% else %}
+	<p>Aucune postulation.</p>
+{% endif %}

@@ -104,3 +104,14 @@ body {
 .list-img-check {
   list-style-image: url("../Images/Icons/check-green.svg");
 }
+
+input:disabled, select:disabled {
+    background-color: #e5e7eb;
+    cursor: not-allowed;
+}
+
+.grayed-out {
+    opacity: 0.5;
+    pointer-events: none; 
+    user-select: none;
+}
