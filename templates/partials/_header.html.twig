@@ -24,7 +24,11 @@
 					{% if app.user.userTypeString == 'Entreprise' %}
 						{% if app.user.logo %}
 							<div class="flex flex-row items-center gap-x-2">
-								<img src="{{ asset('uploads/logos/' ~ app.user.logo) }}" alt="Logo de {{ app.user.name }}" class="w-10 h-10 rounded-full">
+								{% if is_granted('ROLE_STUDENT') %}
+								<img src="{{ asset('build/images/uploads/logos/' ~ app.user.logo) }}" alt="Logo de {{ app.user.name }}" class="w-10 h-10 rounded-full">
+								{% elseif is_granted('ROLE_COMPANY') %}
+								<img src="{{ asset('build/images/uploads/company/' ~ app.user.logo) }}" alt="Logo de {{ app.user.name }}" class="w-10 h-10 rounded-full">
+								{% endif %}
 								<span class="text-gray-600 font-semibold">{{ app.user.name }}</span>
 							</div>
 						{% else %}

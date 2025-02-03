@@ -89,7 +89,7 @@
 			<div class="p-6 border border-gray-300 bg-white">
 				<div class="flex justify-between items-center">
 					<div class="flex items-center">
-						<img alt="" src="{{ asset('build/images/uploads/' ~ offer.company.logo) }}" class="w-16 h-16 object-contain">
+						<img alt="" src="{{ asset('build/images/uploads/company/' ~ offer.company.logo) }}" class="w-16 h-16 object-contain">
 						<div class="ms-6">
 							<h1 class="mb-2 font-semibold text-xl">{{ offer.name }}</h1>
 							<p class="mb-2 text-lg">
@@ -236,6 +236,7 @@
 					</div>
 					<div class="ms-4 flex flex-row gap-x-4 items-center">
 						{{ form_widget(form.profilePicture, { 'attr': { 'class': 'hidden', 'id': 'file-upload-input' } }) }}
+						{{ form_errors(form.profilePicture) }}
 						<label for="application_form_profilePicture" id="application_form_profilePicture_label" class="px-4 py-2 bg-blue-600 text-white font-medium rounded-md shadow-sm cursor-pointer hover:bg-blue-700">
 							Choisir une image
 						</label>

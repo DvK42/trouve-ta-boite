@@ -6,7 +6,7 @@
 			<div class="p-6 border border-gray-300 bg-white">
 				<div class="flex justify-between items-center">
 					<div class="flex items-center">
-						<img alt="" src="{{ asset('build/images/uploads/' ~ offer.company.logo) }}" class="w-16 h-16 object-contain">
+						<img alt="" src="{{ asset('build/images/uploads/company/' ~ offer.company.logo) }}" class="w-16 h-16 object-contain">
 						<div class="ms-6">
 							<h1 class="mb-2 font-semibold text-xl">{{ offer.name }}</h1>
 							<p class="mb-2 text-lg">
@@ -187,20 +187,17 @@
 	</div>
 
 	<div class="mt-18 container mx-auto">
-		<div
-			class="flex flex-row items-center gap-x-8 mb-8">
-			{# <a href="{{ path('app_company_detail', {id: offer.company.id})}}"> #}
-			<img alt={{offer.company.name}} src="{{ asset('build/images/uploads/' ~ offer.company.logo) }}" class="max-w-20"></img>
-		<span class="text-2xl font-bold">{{offer.company.name}}</span>
-		{# </a> #}
+		<a href="{{ path('app_company_detail', {id: offer.company.id})}}" class="flex flex-row items-center gap-x-8 mb-8">
+			<img alt={{offer.company.name}} src="{{ asset('build/images/uploads/company/' ~ offer.company.logo) }}" class="max-w-20"></img>
+			<span class="text-2xl font-bold">{{offer.company.name}}</span>
+		</a>
+		<p class="mb-8">
+			{{offer.company.description}}
+		</p>
+		<a href="{{ path('app_company_detail', {id: offer.company.id})}}">
+			En savoir plus sur {{offer.company.name}}
+		</a>
 	</div>
-	<p class="mb-8">
-		{{offer.company.description}}
-	</p>
-	<a href="{{ path('app_stage_list', {id: offer.company.id})}}" class="text-blue-700 flex items-center font-semibold mt-6">En savoir plus sur
-		{{offer.company.name}}
-	</a>
-</div>
 
 <div class="mt-16 pb-20 pt-18 last-request-container">
 	<div class="container mx-auto">
@@ -213,10 +210,11 @@
 			<a href="{{ path(routeListName)}}" class="text-blue-700">Toutes les offres</a>
 		</div>
 		<div class="mt-12 mb-18 offer-container">
+		
 			{% for similarOffer in similarOffers %}
-				<a href="" class="bg-white offer-card border h-[283px] overflow-hidden justify-between flex flex-col">
+				<a href="{{ path('app_offer_detail', {id: similarOffer.id, type:similarOffer.type})}}" class="bg-white offer-card border h-[283px] overflow-hidden justify-between flex flex-col">
 					<div class="flex justify-between items-start">
-						<img alt={{similarOffer.company.name}} src="{{ asset('build/images/uploads/' ~ similarOffer.company.logo) }}" class="object-contain w-12 h-12"></img>
+						<img alt={{similarOffer.company.name}} src="{{ asset('build/images/uploads/company/' ~ similarOffer.company.logo) }}" class="object-contain w-12 h-12"></img>
 					<span class="px-4 py-2 bg-[#f8f8fd] rounded-xl text-blue-dark text-blue-700 capitalize">{{similarOffer.type}}</span>
 				</div>
 
@@ -226,7 +224,24 @@
 						•
 						{{similarOffer.location}}</p>
 				</div>
-				<p class="opacity-50 text-md relative txt-elipsis">{{similarOffer.description}}</p>
+				<p class="opacity-50 text-md relative txt-elipsis line-clamp-3">{{similarOffer.description}}</p>
+
+				{% if similarOffer.categories is defined and similarOffer.categories|length > 0 %}
+					<div class="flex justify-start items-center flex-wrap gap-2">
+						{% for category in similarOffer.categories|slice(0, 2) %}
+							<span class="px-2 py-1 rounded-lg text-sm font-medium" style="background-color: {{ category.color|hex_to_rgba(0.2) }}; color: {{ category.color }};">
+								{{ category.name }}
+							</span>
+						{% endfor %}
+
+						{% if similarOffer.categories|length > 2 %}
+							<span class="px-2 py-1 rounded-lg text-sm font-medium bg-gray-200 text-gray-800">
+								+{{ similarOffer.categories|length - 2 }}
+							</span>
+						{% endif %}
+					</div>
+				{% endif %}
+
 			</a>
 		{% endfor %}
 	</div>

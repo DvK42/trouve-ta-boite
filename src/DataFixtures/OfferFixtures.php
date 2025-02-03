@@ -70,7 +70,7 @@ class OfferFixtures extends Fixture implements OrderedFixtureInterface
 
     public function getOrder(): int
     {
-        return 4;
+        return 5;
     }
 }
 
