@@ -2,13 +2,14 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Admin;
 use App\Entity\User;
-use App\Entity\Student;
+use App\Entity\Admin;
 use App\Entity\Company;
+use App\Entity\Student;
+use App\Enum\EducationLevel;
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
-use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixtures extends Fixture implements OrderedFixtureInterface
@@ -37,7 +38,8 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
         $student->setPassword($this->passwordHasher->hashPassword($student, 'student123'));
         $student->setFirstName('John');
         $student->setLastName('Doe');
-        $student->setEducation('Computer Science');
+        $student->setEducation(array_rand(EducationLevel::LEVELS));
+        $student->setStudyPlace('ESGI');
         $student->setGender('homme'); 
         $student->setDateOfBirth(new \DateTime('1995-05-15')); 
         $student->setPhone('0612345678'); 
@@ -45,7 +47,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
         $student->setAddressComplement('Appartement 4B'); 
         $student->setCity('Paris'); 
         $student->setPostalCode('75001'); 
-        $student->setPortfolioUrl('https:portfolio.com');
+        $student->setPortfolioUrl('https://portfolio.com');
         $student->setIsDriver(true); 
         $student->setIsHandicap(false); 
         $manager->persist($student);

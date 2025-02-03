@@ -1,0 +1,282 @@
+{% extends 'base.html.twig' %}
+
+{% block page_specific_scripts %}
+
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+		const profilePictureInput = document.querySelector('#{{ form.profilePicture.vars.id }}');
+
+		const fileInput = document.querySelector('#application_form_profilePicture');
+		const fileUploadText = document.querySelector('#application_form_profilePicture_label');
+
+		const fileInfo = document.querySelector('#file-info');
+		const removeFileButton = document.querySelector('#remove-file-button');
+		const profilePicturePreview = document.querySelector('#profile-picture-preview');
+
+		const skillsSelect = document.querySelector('#application_form_skills');
+        const selectedSkillsList = document.querySelector('#selected-skills-list');
+		let addedSkills = {{ studentSkills|length > 0 ? studentSkills|map(skill => {'id': skill.id, 'name': skill.name})|json_encode()|raw : []}};
+
+		const form = document.querySelector('form');
+		const submitButton = document.querySelector('#submit-button');
+
+		const updateInfoCheckbox = document.querySelector('#{{ form.updateInfo.vars.id }}');
+		const toggleFields = document.querySelectorAll('[data-toggle="toggle-field"]');
+		const profilePictureSection = document.querySelector('.profile-picture-section'); // Sélectionner la div de la photo de profil
+		const skillsSection = document.querySelector('.skills-section');
+
+		fileInput.addEventListener('change', function (event) {
+			const file = event.target.files[0];
+			if (file) { // Afficher le nom du fichier et la section "file-info"
+				const fileName = file.name;
+				const fileExtension = fileName.substring(fileName.lastIndexOf('.'));
+				let baseName = fileName.substring(0, fileName.lastIndexOf('.'));
+
+				// Limiter le nom de base à 20 caractères
+				if (baseName.length > 20) {
+					baseName = baseName.substring(0, 20) + '...';
+				}
+
+				// Mettre à jour le texte avec le nom limité + extension
+				fileUploadText.textContent = baseName + fileExtension;
+				fileInfo.classList.remove('hidden');
+
+				// Prévisualisation de l’image
+				const reader = new FileReader();
+				reader.onload = function (e) {
+					profilePicturePreview.src = e.target.result;
+				};
+				reader.readAsDataURL(file);
+			}
+		});
+
+		removeFileButton.addEventListener('click', function () {
+            // Réinitialiser l’input file
+            fileInput.value = '';
+            fileUploadText.textContent = '';
+            fileInfo.classList.add('hidden');
+			fileUploadText.textContent = 'Choisir une image';
+			profilePicturePreview.src = "{{ student.profilePicture ? asset('uploads/profile_pictures/' ~ student.profilePicture) : asset('build/images/avatar-default.svg') }}";  // Retour à l'avatar par défaut
+        });
+
+		function toggleFormFields() {
+			const isDisabled = !updateInfoCheckbox.checked;
+
+			// Activer/désactiver les champs de formulaire
+			toggleFields.forEach(field => {
+				field.disabled = isDisabled;
+			});
+
+			// Griser ou dégager l'effet sur la section de la photo de profil
+			if (isDisabled) {
+				profilePictureSection.classList.add('grayed-out');
+				skillsSection.classList.add('grayed-out');
+			} else {
+				profilePictureSection.classList.remove('grayed-out');
+				skillsSection.classList.remove('grayed-out');
+			}
+		}
+
+		toggleFormFields();
+
+		updateInfoCheckbox.addEventListener('change', toggleFormFields);
+	});
+	</script>
+{% endblock %}
+{% block body %}
+	<div class="flex flex-col bg-gray-200">
+		<div class="container mx-auto my-13">
+			<div class="p-6 border border-gray-300 bg-white">
+				<div class="flex justify-between items-center">
+					<div class="flex items-center">
+						<img alt="" src="{{ asset('build/images/uploads/' ~ offer.company.logo) }}" class="w-16 h-16 object-contain">
+						<div class="ms-6">
+							<h1 class="mb-2 font-semibold text-xl">{{ offer.name }}</h1>
+							<p class="mb-2 text-lg">
+								<span class="font-bold">{{ offer.company.name }}</span>
+								•
+								{{ offer.company.location }}
+								• Du
+								{{ offer.startDate|date('d/m/Y') }}
+								au
+								{{ offer.endDate|date('d/m/Y') }}
+								• ({{ offer.duration }}
+								jours)
+							</p>
+							<div class="flex items-center pt-2">
+								<div class="pr-2">
+									<span class="px-4 py-2 bg-[#f8f8fd] rounded-xl text-blue-dark text-blue-700 capitalize">{{ offer.type }}</span>
+								</div>
+								<div class="flex justify-start items-center flex-wrap gap-2 ml-2">
+									{% for category in offer.categories %}
+										<span class="px-2 py-1 rounded-lg text-sm font-medium" style="background-color:
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																{{ category.color|hex_to_rgba(0.2)}}; color:
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																{{ category.color }};">
+											{{ category.name }}
+										</span>
+									{% endfor %}
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="flex gap-x-8">
+						<div class="flex items-center text-lightgray font-bold bg-gray-200 hover:bg-gray-400 transition">
+							<a href="{{ path('app_offer_detail', { id: offer.id, type: offer.type }) }}" class="px-14 py-4">Retour</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	{{form_start(form, { 'method': 'POST', 'action': path('app_offer_apply_application', { 'type': offer.type, 'id': offer.id }) }) }}
+
+	<div class="mt-14 container mx-auto w-full">
+		<div class="pb-4 border-b w-2/3">
+			{% if offer.type is same as('stage') %}
+				<h2 class="font-semibold mb-4 text-[32px] text-grey-dark">Postulez à cette offre de stage</h2>
+			{% else %}
+				<h2 class="font-semibold mb-4 text-[32px] text-grey-dark">Postulez à cette offre d'alternance</h2>
+			{% endif %}
+		</div>
+	</div>
+	<div class="pt-4 container mx-auto w-full">
+		{{ form_widget(form.updateInfo, { 'attr': { 'class': 'form-checkbox rounded text-blue-600' } }) }}
+		{{ form_label(form.updateInfo, null, { 'label_attr': { 'class': 'ml-2 text-sm text-gray-700 font-bold' } }) }}
+	</div>
+
+	<div class="pb-8 border-b container mx-auto flex">
+		<div class="w-2/3 mr-16">
+			<div class="mt-8">
+
+				<div class="flex flex-col space-y-6">
+					<div class="grid grid-cols-1 md:grid-cols-10 gap-4">
+						<div class="col-span-2">
+							{{ form_label(form.gender, null, { 'label_attr': { 'class': 'block text-sm text-gray-700 font-bold' } }) }}
+							{{ form_widget(form.gender, { 'attr': { 'class': 'form-select mt-1 block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border py-2 px-4', 'data-toggle': 'toggle-field' } }) }}
+						</div>
+						<div class="col-span-4">
+							{{ form_label(form.firstName, null, { 'label_attr': { 'class': 'block text-sm text-gray-700 font-bold' } }) }}
+							{{ form_widget(form.firstName, { 'attr': { 'class': 'mt-1 block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border py-2 px-4', 'data-toggle': 'toggle-field' } }) }}
+						</div>
+						<div class="col-span-4">
+							{{ form_label(form.lastName, null, { 'label_attr': { 'class': 'block text-sm text-gray-700 font-bold' } }) }}
+							{{ form_widget(form.lastName, { 'attr': { 'class': 'mt-1 block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border py-2 px-4', 'data-toggle': 'toggle-field' } }) }}
+						</div>
+					</div>
+
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+						<div>
+							{{ form_label(form.dateOfBirth, null, { 'label_attr': { 'class': 'block text-sm text-gray-700 font-bold' } }) }}
+							{{ form_widget(form.dateOfBirth, { 'attr': { 'class': 'mt-1 block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border py-2 px-4', 'data-toggle': 'toggle-field' } }) }}
+						</div>
+						<div>
+							{{ form_label(form.phone, null, { 'label_attr': { 'class': 'block text-sm text-gray-700 font-bold' } }) }}
+							{{ form_widget(form.phone, { 'attr': { 'class': 'mt-1 block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border py-2 px-4', 'data-toggle': 'toggle-field' } }) }}
+						</div>
+					</div>
+
+					<div class="">
+						<div>
+							{{ form_label(form.email, null, { 'label_attr': { 'class': 'block text-sm text-gray-700 font-bold' } }) }}
+							{{ form_widget(form.email, { 'attr': { 'class': 'mt-1 block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border py-2 px-4', 'data-toggle': 'toggle-field', 'readonly' :'true' } }) }}
+							{{ form_errors(form.email) }}
+						</div>
+					</div>
+
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+						<div>
+							{{ form_label(form.address, null, { 'label_attr': { 'class': 'block text-sm text-gray-700 font-bold' } }) }}
+							{{ form_widget(form.address, { 'attr': { 'class': 'mt-1 block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border py-2 px-4', 'data-toggle': 'toggle-field' } }) }}
+						</div>
+						<div>
+							{{ form_label(form.addressComplement, null, { 'label_attr': { 'class': 'block text-sm text-gray-700 font-bold' } }) }}
+							{{ form_widget(form.addressComplement, { 'attr': { 'class': 'mt-1 block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border py-2 px-4', 'data-toggle': 'toggle-field' } }) }}
+						</div>
+					</div>
+
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+						<div>
+							{{ form_label(form.postalCode, null, { 'label_attr': { 'class': 'block text-sm text-gray-700 font-bold' } }) }}
+							{{ form_widget(form.postalCode, { 'attr': { 'class': 'mt-1 block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border py-2 px-4', 'data-toggle': 'toggle-field' } }) }}
+						</div>
+						<div>
+							{{ form_label(form.city, null, { 'label_attr': { 'class': 'block text-sm text-gray-700 font-bold' } }) }}
+							{{ form_widget(form.city, { 'attr': { 'class': 'mt-1 block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border py-2 px-4', 'data-toggle': 'toggle-field' } }) }}
+						</div>
+					</div>
+
+					<div>
+						{{ form_label(form.portfolioUrl, null, { 'label_attr': { 'class': 'block text-sm text-gray-700 font-bold' } }) }}
+						{{ form_widget(form.portfolioUrl, { 'attr': { 'class': 'mt-1 block w-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border py-2 px-4', 'data-toggle': 'toggle-field' } }) }}
+
+					</div>
+
+					<div class="grid grid-cols-2 gap-4 items-center">
+						<div>
+							{{ form_widget(form.isDriver, { 'attr': { 'class': 'form-checkbox rounded text-blue-600', 'data-toggle': 'toggle-field' } }) }}
+							{{ form_label(form.isDriver, null, { 'label_attr': { 'class': 'ml-2 text-sm text-gray-700 font-bold' } }) }}
+						</div>
+						<div>
+							{{ form_widget(form.isHandicap, { 'attr': { 'class': 'form-checkbox rounded text-blue-600', 'data-toggle': 'toggle-field' } }) }}
+							{{ form_label(form.isHandicap, null, { 'label_attr': { 'class': 'ml-2 text-sm text-gray-700 font-bold' } }) }}
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<div class="w-1/3 mt-8">
+			<div class="flex flex-col space-y-2 pb-8 border-b profile-picture-section">
+				<label class="block text-sm text-gray-700 font-bold">Photo de profil</label>
+				<div class="mt-2 flex items-center gap-x-4">
+					<div class="w-16 h-16 overflow-hidden rounded-full border border-gray-300">
+						<img id="profile-picture-preview" src="{{ student.profilePicture ? asset('build/images/uploads/profile/' ~ student.profilePicture) : asset('build/images/avatar-default.svg') }}" alt="Photo de profil" class="w-full h-full object-cover">
+					</div>
+					<div class="ms-4 flex flex-row gap-x-4 items-center">
+						{{ form_widget(form.profilePicture, { 'attr': { 'class': 'hidden', 'id': 'file-upload-input' } }) }}
+						<label for="application_form_profilePicture" id="application_form_profilePicture_label" class="px-4 py-2 bg-blue-600 text-white font-medium rounded-md shadow-sm cursor-pointer hover:bg-blue-700">
+							Choisir une image
+						</label>
+						<div id="file-info" class="hidden">
+							<button id="remove-file-button" type="button" class="cursor-pointer px-4 py-2 h-full font-medium bg-red-500 text-white rounded-md shadow-sm hover:bg-red-600">
+								X
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="flex flex-col space-y-2 mt-8 pb-8 skills-section">
+				<div class="mb-6">
+					<h3 class="text-lg font-bold text-gray-800">Compétences :</h3>
+
+					<div class="mt-4 grid grid-cols-2 md:grid-cols-2 gap-4">
+						{% for skill in form.skills %}
+							<div class="flex items-center space-x-2">
+								{{ form_widget(skill, { 'attr': { 'class': 'rounded-md text-blue-600 focus:ring-blue-500 cursor-pointer' } }) }}
+								<label for="{{ skill.vars.id }}" class="text-gray-700 font-medium cursor-pointer">{{ skill.vars.label }}</label>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="my-8 container mx-auto">
+		{{ form_label(form.coverLetter, 'Lettre de motivation', { 'label_attr': { 'class': 'block text-lg font-semibold text-gray-700' } }) }}
+		{{ form_widget(form.coverLetter, { 'attr': { 'class': 'block w-full p-2 mt-1 border-gray-300 border rounded-md' } }) }}
+	</div>
+
+<div class="my-6 container mx-auto">
+	<button type="submit" id="submit-button" class="px-6 py-3 bg-blue-600 text-white font-semibold shadow-md hover:bg-blue-700 focus:ring focus:ring-blue-300">
+		Postuler
+	</button>
+</div>
+
+	{{ form_end(form) }}
+
+
+</div></div></div>
+{% endblock %}

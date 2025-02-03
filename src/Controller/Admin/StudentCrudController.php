@@ -44,6 +44,9 @@ class StudentCrudController extends AbstractCrudController
             CollectionField::new('applications', 'Postulations')
                 ->onlyOnDetail()
                 ->setTemplatePath('admin/fields/applications_list.html.twig'),
+            CollectionField::new('skills', 'Compétences')
+                ->onlyOnDetail()
+                ->setTemplatePath('admin/fields/skills_list.html.twig'),
             TextField::new('education', 'Niveau d\'étude'),
             ChoiceField::new('gender', 'Genre')
                 ->setChoices([

@@ -2,11 +2,12 @@
 
 namespace App\DataFixtures;
 
+use Faker\Factory;
 use App\Entity\Student;
+use App\Enum\EducationLevel;
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
-use Doctrine\Persistence\ObjectManager;
-use Faker\Factory;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class StudentFixtures extends Fixture implements OrderedFixtureInterface
@@ -32,7 +33,8 @@ class StudentFixtures extends Fixture implements OrderedFixtureInterface
             );
             $student->setFirstName($faker->firstName);
             $student->setLastName($faker->lastName);
-            $student->setEducation($faker->randomElement(['Computer Science', 'Engineering', 'Business Management', 'Mathematics']));
+            $student->setEducation(array_rand(EducationLevel::LEVELS));
+            $student->setStudyPlace($faker->catchPhrase);
 
             $student->setGender($faker->randomElement(['homme', 'femme', 'autre']));
 

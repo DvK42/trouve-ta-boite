@@ -30,6 +30,9 @@ class Student extends User implements UserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $education = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $studyPlace = null;
+
     #[ORM\Column(length: 10)]
     #[Assert\Choice(choices: ['homme', 'femme', 'autre'], message: 'Le genre doit être "homme", "femme" ou "autre".')]
     private ?string $gender = null;
@@ -60,6 +63,9 @@ class Student extends User implements UserInterface
 
     #[ORM\Column(type: 'boolean')]
     private bool $isHandicap = false;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $profilePicture = null;
 
     /**
      * @var Collection<int, Application>
@@ -105,6 +111,18 @@ class Student extends User implements UserInterface
     public function setEducation(?string $education): static
     {
         $this->education = $education;
+
+        return $this;
+    }
+
+    public function getStudyPlace(): ?string
+    {
+        return $this->studyPlace;
+    }
+
+    public function setStudyPlace(?string $studyPlace): static
+    {
+        $this->studyPlace = $studyPlace;
 
         return $this;
     }
@@ -292,5 +310,17 @@ class Student extends User implements UserInterface
     public function getUserIdentifier(): string
     {
         return $this->getEmail();
+    }
+
+
+    public function getProfilePicture(): ?string
+    {
+        return $this->profilePicture;
+    }
+
+    public function setProfilePicture(?string $profilePicture): self
+    {
+        $this->profilePicture = $profilePicture;
+        return $this;
     }
 }
