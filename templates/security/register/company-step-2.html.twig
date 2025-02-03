@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<div class="container mx-auto py-10 px-4">
+		{{ form_start(form, {'attr': {'id': 'type-form', 'class': 'mt-16 flex flex-col justify-between gap-x-8 w-full mx-auto'}}) }}
+		<div class="flex justify-between mb-8">
+			<div class="w-full flex flex-col">
+				<p class="text-xl font-semibold text-grey-dark text-center mb-8">Dites-nous en plus</p>
+				<div class="flex flex-col justify-between items-center gap-y-8">
+					<div class="flex flex-col justify-between w-2/3 gap-x-3">
+						<div class="flex flex-row space-x-2">
+							<div class="w-1/2">{{ form_row(form.contactEmail, {'attr': {'class': 'border flex flex-col input-apply w-full'}}) }}</div>
+							<div class="w-1/2">{{ form_row(form.phone, {'attr': {'class': 'border flex flex-col input-apply w-full'}}) }}</div>
+						</div>
+						{{ form_row(form.websiteUrl, {'attr': {'class': 'border flex flex-col input-apply w-full'}}) }}
+                        {{ form_row(form.catchPhrase, {'attr': {'class': 'border flex flex-col input-apply w-full'}}) }}
+                        {{ form_row(form.description, {'attr': {'class': 'border flex flex-col input-apply w-full'}}) }}
+						
+					</div>
+				</div>
+				<div class="flex justify-end mx-auto w-2/3 gap-x-3">
+					<button type="submit" class="btn-blue-dark w-fit border rounded px-4 py-2 mt-4 bg-blue-700 hover:bg-white border-blue-700 text-white hover:text-blue-700 transition cursor-pointer self-end">Ajouter ces informations</button>
+				</div>
+			</div>
+		</div>
+
+		{{ form_rest(form) }}
+		{{ form_end(form) }}
+	</form>
+</div>{% endblock %}
+

@@ -5,7 +5,7 @@
 	<div class="container mx-auto my-13">
 		<div class="p-6">
 			<div class="flex flex-col gap-y-8">
-				<div class="flex items-center">
+				<div class="flex flex-col">
                     <h1 class="mb-2 text-5xl font-bold">{{ company.name }}</h1>
                     {% if company.websiteUrl %}
                     <a href="{{ company.websiteUrl }}" class="bg-white px-3 py-2 mt-4 text-[#4640de] font-semibold flex items-center w-fit rounded-md">
@@ -46,7 +46,7 @@
                         <img src="{{asset('build/images/icons/company-location.svg')}}" alt="Localisation" class="w-8 h-8">
                         <div class="flex flex-col">
                             <p>Localisation</p>
-                            <span class="font-bold">{{company.location}}</span>
+                            <span class="font-bold">{{company.location}} ({{company.postalCode}})</span>
                         </div>
                     </div>
 					{% endif %}
@@ -71,7 +71,7 @@
 
 		{% if company.contactEmail or company.phone %}
         <div class="p-6">
-            <h2 class="font-semibold mb-4 text-[32px]">Contacts</h2>
+            <h2 class="font-semibold mb-4 text-[32px]">Contact</h2>
 			<div class="flex flex-row space-x-4">
 				{% if company.contactEmail %}
             	<a href="mailto:{{company.contactEmail}}" class="border-2 border-blue-600 text-blue-600 flex space-x-4 p-4 items-center hover:bg-blue-100 transition cursor-pointer">
