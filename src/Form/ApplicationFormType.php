@@ -6,10 +6,7 @@ use App\Entity\Skill;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\EqualTo;
-use Symfony\Component\Validator\Constraints\Callback;
-use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -19,7 +16,6 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class ApplicationFormType extends AbstractType
 {
@@ -70,6 +66,17 @@ class ApplicationFormType extends AbstractType
                 'label' => 'Photo de profil',
                 'mapped' => false,
                 'required' => false,
+                'attr' => [
+                    'accept' => 'image/jpeg, image/png, image/gif, image/webp',
+                ],
+                'constraints' => [
+                    new Image([
+                        'mimeTypes' => ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
+                        'mimeTypesMessage' => 'Seules les images au format JPEG, PNG, GIF ou WEBP sont autorisées.',
+                        'maxSize' => '2M',
+                        'maxSizeMessage' => 'L’image ne doit pas dépasser 2 Mo.',
+                    ]),
+                ],
             ])
             ->add('skills', EntityType::class, [
                 'class' => Skill::class,

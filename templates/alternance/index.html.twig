@@ -18,7 +18,7 @@
 			{% for alternance in pagination.items %}
 				<div class="bg-white border border-gray-200 rounded-lg shadow-md p-6 flex justify-between items-center">
 					<div class="flex items-start">
-						<img src="{{ asset('build/images/uploads/' ~ alternance.company.logo) }}" alt="Logo entreprise" class="w-16 h-16 mr-4 rounded-lg object-cover">
+						<img src="{{ asset('build/images/uploads/company/' ~ alternance.company.logo) }}" alt="Logo entreprise" class="w-16 h-16 mr-4 rounded-lg object-cover">
 						<div>
 							<h2 class="text-lg font-bold text-blue-600">{{ alternance.name }}</h2>
 							<span class="text-gray-600 font-semibold">{{ alternance.company.name }}

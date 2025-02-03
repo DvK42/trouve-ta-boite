@@ -2,8 +2,10 @@
 
 namespace App\DataFixtures;
 
+use Faker\Factory;
 use App\Entity\User;
 use App\Entity\Admin;
+use App\Entity\Sector;
 use App\Entity\Company;
 use App\Entity\Student;
 use App\Enum\EducationLevel;
@@ -23,13 +25,14 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
+        $faker = Factory::create('fr_FR');
+        
         // Créer un administrateur
         $admin = new Admin();
         $admin->setEmail('admin@example.com');
         $admin->setRoles(['ROLE_ADMIN']);
         $admin->setPassword($this->passwordHasher->hashPassword($admin, 'admin123'));
         $manager->persist($admin);
-
 
         // Créer un étudiant
         $student = new Student();
@@ -52,6 +55,8 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
         $student->setIsHandicap(false); 
         $manager->persist($student);
 
+        $sectors = $manager->getRepository(Sector::class)->findAll();
+
         // Créer une entreprise
         $company = new Company();
         $company->setEmail('company@example.com');
@@ -59,8 +64,20 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
         $company->setPassword($this->passwordHasher->hashPassword($company, 'company123'));
         $company->setName('TechCorp');
         $company->setLocation('Paris');
-        $company->setSector('Technology');
         $company->setDescription('A leading tech company.');
+        $company->setAddress('8 ' . $faker->address);
+        $company->setAddressComplement($faker->secondaryAddress);
+        $company->setPostalCode($faker->postcode);
+        $company->setLocation($faker->city);
+        $company->setPhone($faker->phoneNumber);
+        $company->setContactEmail($faker->companyEmail);
+        $company->setEmployeeCount($faker->numberBetween(10, 500));
+        $company->setYearFounded(2025);
+        $company->setCatchPhrase($faker->catchPhrase);
+        if (!empty($sectors)) {
+            $randomSector = $sectors[array_rand($sectors)];
+            $company->setSector($randomSector);
+        }
         $manager->persist($company);
 
         // Sauvegarder les données en base
@@ -69,7 +86,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
 
         public function getOrder(): int
     {
-        return 1;
+        return 2;
     }
 
 }

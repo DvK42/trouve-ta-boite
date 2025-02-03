@@ -24,12 +24,36 @@ class Company extends User implements UserInterface
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $location = null;
-
+    
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $sector = null;
+    private ?string $catchPhrase = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $websiteUrl = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $address = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $addressComplement = null;
+
+    #[ORM\Column(type: 'string', length: 20, nullable: true)]
+    private ?string $postalCode = null;
+
+    #[ORM\Column(type: 'string', length: 20, nullable: true)]
+    private ?string $phone = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $contactEmail = null;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $employeeCount = null;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $yearFounded = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $logo = null;
@@ -39,6 +63,10 @@ class Company extends User implements UserInterface
      */
     #[ORM\OneToMany(targetEntity: Offer::class, mappedBy: 'company', orphanRemoval: true)]
     private Collection $offers;
+
+    #[ORM\ManyToOne(inversedBy: 'company')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Sector $sector = null;
 
     public function getName(): ?string
     {
@@ -64,14 +92,26 @@ class Company extends User implements UserInterface
         return $this;
     }
 
-    public function getSector(): ?string
+    public function getSector(): ?Sector
     {
         return $this->sector;
     }
 
-    public function setSector(?string $sector): static
+    public function setSector(?Sector $sector): static
     {
         $this->sector = $sector;
+
+        return $this;
+    }
+
+    public function getCatchPhrase(): ?string
+    {
+        return $this->catchPhrase;
+    }
+
+    public function setCatchPhrase(?string $catchPhrase): static
+    {
+        $this->catchPhrase = $catchPhrase;
 
         return $this;
     }
@@ -85,6 +125,95 @@ class Company extends User implements UserInterface
     {
         $this->description = $description;
 
+        return $this;
+    }
+    
+    public function getWebsiteUrl(): ?string
+    {
+        return $this->websiteUrl;
+    }
+
+    public function setWebsiteUrl(?string $websiteUrl): static
+    {
+        $this->websiteUrl = $websiteUrl;
+
+        return $this;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?string $address): self
+    {
+        $this->address = $address;
+        return $this;
+    }
+
+    public function getAddressComplement(): ?string
+    {
+        return $this->addressComplement;
+    }
+
+    public function setAddressComplement(?string $addressComplement): self
+    {
+        $this->addressComplement = $addressComplement;
+        return $this;
+    }
+
+    public function getPostalCode(): ?string
+    {
+        return $this->postalCode;
+    }
+
+    public function setPostalCode(?string $postalCode): self
+    {
+        $this->postalCode = $postalCode;
+        return $this;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(?string $phone): self
+    {
+        $this->phone = $phone;
+        return $this;
+    }
+
+    public function getContactEmail(): ?string
+    {
+        return $this->contactEmail;
+    }
+
+    public function setContactEmail(?string $contactEmail): self
+    {
+        $this->contactEmail = $contactEmail;
+        return $this;
+    }
+
+    public function getEmployeeCount(): ?int
+    {
+        return $this->employeeCount;
+    }
+
+    public function setEmployeeCount(?int $employeeCount): self
+    {
+        $this->employeeCount = $employeeCount;
+        return $this;
+    }
+
+    public function getYearFounded(): ?int
+    {
+        return $this->yearFounded;
+    }
+
+    public function setYearFounded(?int $yearFounded): self
+    {
+        $this->yearFounded = $yearFounded;
         return $this;
     }
 

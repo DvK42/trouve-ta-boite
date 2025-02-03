@@ -60,7 +60,7 @@ class ApplicationFixtures extends Fixture implements OrderedFixtureInterface
 
     public function getOrder(): int
     {
-        return 6;
+        return 7;
     }
 
 }

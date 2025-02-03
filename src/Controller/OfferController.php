@@ -16,9 +16,15 @@ class OfferController extends AbstractController
     public function detail(string $type, int $id, OfferRepository $offerRepository): Response
     {
         $offer = $offerRepository->find($id);
-        /** @var Student $student */
-        $student = $this->getUser();
-
+        $hasApplied = false;
+        
+        if($this->isGranted('ROLE_STUDENT')){
+            /** @var Student $user */
+            $user = $this->getUser();
+            $hasApplied = $user->getApplications()->exists(function ($key, $application) use ($offer) {
+                return $application->getOfferId()->getId() === $offer->getId();
+            });
+        }
         $startDate = $offer->getStartDate();
         $endDate = $offer->getEndDate();
         $duration = $startDate->diff($endDate)->days;
@@ -36,9 +42,6 @@ class OfferController extends AbstractController
         $routeListName = $type === 'stage' ? 'app_stage_list' : 'app_alternance_list';
         $applicationsCount = $offer->getApplicationsCount();
 
-        $hasApplied = $student->getApplications()->exists(function ($key, $application) use ($offer) {
-            return $application->getOfferId()->getId() === $offer->getId();
-        });
 
         return $this->render('offer/detail.html.twig', [
             'offer' => $offer,
@@ -52,16 +55,27 @@ class OfferController extends AbstractController
     #[Route('/{type}/{id}/postuler', name: 'app_offer_apply', requirements: ['type' => 'stage|alternance'])]
     public function apply(string $type, int $id, OfferRepository $offerRepository): Response
     {
-        $offer = $offerRepository->find($id);
+        // Restriction -- ROLE_STUDENT
 
-        /** @var Student $student */
-        $student = $this->getUser();
-        $hasApplied = $student->getApplications()->exists(function ($key, $application) use ($offer) {
-            return $application->getOfferId()->getId() === $offer->getId();
-        });
+        $offer = $offerRepository->find($id);
+        $user = $this->getUser();
+        
+        if($this->isGranted('ROLE_STUDENT')){
+            /** @var Student $student */
+            $student = $user;
+            
+            $hasApplied = $student->getApplications()->exists(function ($key, $application) use ($offer) {
+                return $application->getOfferId()->getId() === $offer->getId();
+            });
+        }else{
+            $this->addFlash('error', 'Vous n\'avez pas les permissions pour postuler !');
+            return $this->redirectToRoute('app_offer_detail', ['type' => $offer->getType(), 'id' => $offer->getId()]);
+        }
+        
+        // Sécurité -- l'utilisateur a déjà postulé
 
         if($hasApplied) {
-            $this->addFlash('error', 'Vous avez déjà postulé à cette offre');
+            $this->addFlash('error', 'Vous avez déjà postulé à cette offre !');
             return $this->redirectToRoute('app_offer_detail', ['type' => $offer->getType(), 'id' => $offer->getId()]);
         }
 

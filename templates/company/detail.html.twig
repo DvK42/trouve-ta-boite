@@ -1,0 +1,174 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="flex flex-col bg-gray-200">
+	<div class="container mx-auto my-13">
+		<div class="p-6">
+			<div class="flex flex-col gap-y-8">
+				<div class="flex items-center">
+                    <h1 class="mb-2 text-5xl font-bold">{{ company.name }}</h1>
+                    {% if company.websiteUrl %}
+                    <a href="{{ company.websiteUrl }}" class="bg-white px-3 py-2 mt-4 text-[#4640de] font-semibold flex items-center w-fit rounded-md">
+                        Site web de l'entreprise
+                    </a>
+                    {% endif %}
+				</div>
+				<div class="flex flex-row gap-x-16">
+					{% if company.sector is defined %}
+                    <div class="flex gap-x-2 items-center">
+                        <img src="{{asset('build/images/icons/company-activity.svg')}}" alt="Activité" class="w-8 h-8">
+                        <div class="flex flex-col">
+                            <p>Activité</p>
+                            <span class="font-bold">{{company.sector}}</span>
+                        </div>
+                    </div>
+					{% endif %}
+					{% if company.yearFounded is defined %}
+                    <div class="flex gap-x-2 items-center">
+                        <img src="{{asset('build/images/icons/company-creation.svg')}}" alt="Année de création" class="w-8 h-8">
+                        <div class="flex flex-col">
+                            <p>Année de création</p>
+                            <span class="font-bold">{{company.yearFounded}}</span>
+                        </div>
+                    </div>
+					{% endif %}
+					{% if company.employeeCount is defined %}
+                    <div class="flex gap-x-2 items-center">
+						<img src="{{asset('build/images/icons/company-employee.svg')}}" alt="Effectif" class="w-8 h-8">
+                        <div class="flex flex-col">
+                            <p>Effectif</p>
+                            <span class="font-bold">{{company.employeeCount}}</span>
+                        </div>
+                    </div>
+					{% endif %}
+					{% if company.location is defined %}
+                    <div class="flex gap-x-2 items-center">
+                        <img src="{{asset('build/images/icons/company-location.svg')}}" alt="Localisation" class="w-8 h-8">
+                        <div class="flex flex-col">
+                            <p>Localisation</p>
+                            <span class="font-bold">{{company.location}}</span>
+                        </div>
+                    </div>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="mt-14 pb-18 container mx-auto flex justify-between">
+    <div class="w-2/3 mr-16">
+        <div class="p-6">
+			{% if company.catchPhrase %}<p class="mb-4 font-bold">{{company.catchPhrase}}</p>{% endif %}
+            <h2 class="font-semibold mb-4 text-[32px]">Présentation</h2>
+            <p>
+			{% if company.description %}
+				{{company.description}}
+			{% else %}
+				Aucune description renseignée
+			{% endif %}
+			</p>
+        </div>
+
+		{% if company.contactEmail or company.phone %}
+        <div class="p-6">
+            <h2 class="font-semibold mb-4 text-[32px]">Contacts</h2>
+			<div class="flex flex-row space-x-4">
+				{% if company.contactEmail %}
+            	<a href="mailto:{{company.contactEmail}}" class="border-2 border-blue-600 text-blue-600 flex space-x-4 p-4 items-center hover:bg-blue-100 transition cursor-pointer">
+					<img src="{{asset('build/images/icons/mail.svg')}}" alt="mail" class="max-w-8 max-h-8"/>
+					<span>{{company.contactEmail}}</span>
+				</a>
+				{% endif %}
+				{% if company.phone %}
+            	<a href="tel:{{company.phone}}" class="border-2 border-blue-600 text-blue-600 flex space-x-4 p-4 items-center hover:bg-blue-100 transition cursor-pointer">
+					<img src="{{asset('build/images/icons/phone.svg')}}" alt="phone" class="max-w-8 max-h-8"/>
+					<span>{{company.phone}}</span>
+				</a>
+				{% endif %}
+			</div>
+        </div>
+		{% endif %}
+    </div>
+    <div class="w-1/3">
+		<img alt={{company.name}} src="{{ asset('build/images/uploads/company/' ~ company.logo) }}"></img>
+		<div class="flex flex-col mt-8">
+			<h2 class="font-semibold mb-4 text-[32px]">Situation</h2>
+			<span class="font-bold">{{company.name}}</span>
+			<span>{{company.address}}</span>
+			{% if company.addressComplement %}<span>{{company.addressComplement}}</span>{% endif %}
+			<span>{{company.postalCode}} {{company.location}}</span>
+		</div>
+    </div>
+</div>
+{% if stageOffers|length > 0 or alternanceOffers|length > 0 %}
+<div class="pb-20 pt-18 last-request-container">
+	<div class="container mx-auto">
+
+		{% if stageOffers|length > 0 %}
+			<div class="flex flex-row justify-between items-center">
+				<h2 class="font-semibold mb-4 text-[32px]">Offres de stage proposées</h2>
+			</div>
+			<div class="mt-12 mb-18 offer-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+				{% for offer in stageOffers %}
+					<a href="{{ path('app_offer_detail', {id: offer.id, type: offer.type}) }}" class="bg-white offer-card border h-[283px] overflow-hidden justify-between flex flex-col p-4 hover:shadow-lg transition">
+						<div class="my-2">
+							<h3 class="font-semibold text-[18px]">{{ offer.name }}</h3>
+							<p class="offer-informations text-md text-wrap">{{ offer.location }}</p>
+						</div>
+						<p class="opacity-50 text-md relative txt-elipsis line-clamp-5">{{ offer.description }}</p>
+
+						{% if offer.categories is defined and offer.categories|length > 0 %}
+							<div class="flex justify-start items-center flex-wrap gap-2 mt-2">
+								{% for category in offer.categories|slice(0, 2) %}
+									<span class="px-2 py-1 rounded-lg text-sm font-medium" style="background-color: {{ category.color|hex_to_rgba(0.2) }}; color: {{ category.color }};">
+										{{ category.name }}
+									</span>
+								{% endfor %}
+								{% if offer.categories|length > 2 %}
+									<span class="px-2 py-1 rounded-lg text-sm font-medium bg-gray-200 text-gray-800">
+										+{{ offer.categories|length - 2 }}
+									</span>
+								{% endif %}
+							</div>
+						{% endif %}
+					</a>
+				{% endfor %}
+			</div>
+		{% endif %}
+
+		{% if alternanceOffers|length > 0 %}
+			<div class="flex flex-row justify-between items-center mt-16">
+				<h2 class="font-semibold mb-4 text-[32px]">Offres d'alternance proposées</h2>
+			</div>
+			<div class="mt-12 mb-18 offer-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+				{% for offer in alternanceOffers %}
+					<a href="{{ path('app_offer_detail', {id: offer.id, type: offer.type}) }}" class="bg-white offer-card border h-[283px] overflow-hidden justify-between flex flex-col p-4 hover:shadow-lg transition">
+						<div class="my-2">
+							<h3 class="font-semibold text-[18px]">{{ offer.name }}</h3>
+							<p class="offer-informations text-md text-wrap">{{ offer.location }}</p>
+						</div>
+						<p class="opacity-50 text-md relative txt-elipsis line-clamp-5">{{ offer.description }}</p>
+
+						{% if offer.categories is defined and offer.categories|length > 0 %}
+							<div class="flex justify-start items-center flex-wrap gap-2 mt-2">
+								{% for category in offer.categories|slice(0, 2) %}
+									<span class="px-2 py-1 rounded-lg text-sm font-medium" style="background-color: {{ category.color|hex_to_rgba(0.2) }}; color: {{ category.color }};">
+										{{ category.name }}
+									</span>
+								{% endfor %}
+								{% if offer.categories|length > 2 %}
+									<span class="px-2 py-1 rounded-lg text-sm font-medium bg-gray-200 text-gray-800">
+										+{{ offer.categories|length - 2 }}
+									</span>
+								{% endif %}
+							</div>
+						{% endif %}
+					</a>
+				{% endfor %}
+			</div>
+		{% endif %}
+
+	</div>
+</div>
+{% endif %}
+{% endblock %}

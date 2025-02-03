@@ -60,6 +60,6 @@ class StudentFixtures extends Fixture implements OrderedFixtureInterface
 
     public function getOrder(): int
     {
-        return 2; 
+        return 3; 
     }
 }

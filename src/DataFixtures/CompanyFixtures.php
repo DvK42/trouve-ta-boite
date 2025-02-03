@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use Faker\Factory;
+use App\Entity\Sector;
 use App\Entity\Company;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -26,7 +27,9 @@ class CompanyFixtures extends Fixture implements OrderedFixtureInterface
         $filesystem = new Filesystem();
         $httpClient = HttpClient::create();
 
-        $targetDirectory = 'assets/images/uploads';
+        $sectors = $manager->getRepository(Sector::class)->findAll();
+
+        $targetDirectory = 'assets/images/uploads/company';
 
         if (!$filesystem->exists($targetDirectory)) {
             $filesystem->mkdir($targetDirectory);
@@ -40,11 +43,23 @@ class CompanyFixtures extends Fixture implements OrderedFixtureInterface
                 $this->passwordHasher->hashPassword($company, 'password123')
             );
             $company->setName($faker->company);
+            $company->setAddress($faker->address);
+            $company->setAddressComplement($faker->secondaryAddress);
+            $company->setPostalCode($faker->postcode);
             $company->setLocation($faker->city);
-            $company->setSector($faker->catchPhrase);
+            $company->setPhone($faker->phoneNumber);
+            $company->setContactEmail($faker->companyEmail);
+            $company->setEmployeeCount($faker->numberBetween(10, 500));
+            $company->setYearFounded($faker->year);
+            $company->setCatchPhrase($faker->catchPhrase);
             $company->setDescription($faker->paragraph(1));
             $imageUrl = 'https://loremflickr.com/200/200/business';
             $imageFilename = sprintf('%s/logo_%s.jpg', $targetDirectory, uniqid());
+
+            if (!empty($sectors)) {
+                $randomSector = $faker->randomElement($sectors);
+                $company->setSector($randomSector);
+            }
 
             $response = $httpClient->request('GET', $imageUrl);
             if ($response->getStatusCode() === 200) {
@@ -61,6 +76,6 @@ class CompanyFixtures extends Fixture implements OrderedFixtureInterface
 
     public function getOrder(): int
     {
-        return 3;
+        return 4;
     }
 }

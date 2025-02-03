@@ -30,7 +30,7 @@
         {% for company in topCompanies %}
             <div class="p-4 flex flex-col items-center">
                 {% if company.logo %}
-                <img src="{{ asset('build/images/uploads/' ~ company.logo) }}" alt="{{ company.name }}" class="max-h-30">
+                <img src="{{ asset('build/images/uploads/company/' ~ company.logo) }}" alt="{{ company.name }}" class="max-h-30">
                 <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ company.name }}</h3>
                 {% else %}
                 <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ company.name }}</h3>
@@ -87,7 +87,7 @@
             {% for offer in lastestOffers %}
             <div class="bg-white p-4 rounded-lg shadow hover:shadow-md transition">
                 <div class="flex items-center justify-between mb-4">
-                    <img src="{{ asset('build/images/uploads/' ~ offer.company.logo) }}" alt="{{ offer.company.name }}" class="h-10 w-10 rounded-full">
+                    <img src="{{ asset('build/images/uploads/company/' ~ offer.company.logo) }}" alt="{{ offer.company.name }}" class="h-10 w-10 rounded-full">
                     <span class="text-sm font-medium text-blue-500 bg-blue-100 px-2 py-1 rounded capitalize">
                         {{ offer.type }}
                     </span>
