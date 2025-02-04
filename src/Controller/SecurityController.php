@@ -7,7 +7,7 @@ use App\Entity\Company;
 use App\Entity\Student;
 use App\Form\RegisterChoiceFormType;
 use App\Form\RegisterStudentFormType;
-use App\Security\CompanyAuthenticator;
+use App\Security\UserAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\RegisterCompanyStep1FormType;
 use App\Form\RegisterCompanyStep2FormType;
@@ -24,7 +24,7 @@ class SecurityController extends AbstractController
 {
     public function __construct(
         private UserAuthenticatorInterface $userAuthenticator,
-        private CompanyAuthenticator $authenticator
+        private UserAuthenticator $authenticator
     ) {}
 
     #[Route(path: '/login', name: 'app_login')]
@@ -92,6 +92,12 @@ class SecurityController extends AbstractController
             $entityManager->persist($student);
             $entityManager->flush();
 
+            $this->userAuthenticator->authenticateUser(
+                $student,
+                $this->authenticator,
+                $request
+            );
+            
             $this->addFlash('success', 'Étudiant créé avec succès.');
             return $this->redirectToRoute('app_home');
         }
