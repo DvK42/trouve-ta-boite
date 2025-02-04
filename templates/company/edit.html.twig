@@ -1,0 +1,100 @@
+{% extends 'account/layout.html.twig' %}
+
+{% block accountBody %}
+
+<div class="container mx-auto p-8 bg-white shadow-md rounded">
+	<h1 class="text-2xl font-bold mb-6">Modifier mon entrprise</h1>
+    
+    {{ form_start(form) }}
+
+    <div class="mb-8">
+    
+        <h2 class="text-xl font-semibold mb-4">Informations générales</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                {{ form_label(form.name) }}
+                {{ form_widget(form.name, { 'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-md' } }) }}
+            </div>
+
+            <div>
+                {{ form_label(form.sector) }}
+                {{ form_widget(form.sector, { 'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-md' } }) }}
+            </div>
+
+            <div>
+                {{ form_label(form.employeeCount) }}
+                {{ form_widget(form.employeeCount, { 'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-md' } }) }}
+            </div>
+
+            <div>
+                {{ form_label(form.yearFounded) }}
+                {{ form_widget(form.yearFounded, { 'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-md' } }) }}
+            </div>
+
+            <div>
+                {{ form_label(form.websiteUrl) }}
+                {{ form_widget(form.websiteUrl, { 'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-md' } }) }}
+            </div>
+
+
+            <div>
+                {{ form_label(form.logo) }}
+                {{ form_widget(form.logo, { 'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-md' } }) }}
+            </div>
+        </div>
+        <div class="flex flex-col">
+            <div class="mt-6">
+                {{ form_label(form.catchPhrase) }}
+                {{ form_widget(form.catchPhrase, { 'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-md' } }) }}
+            </div>
+
+            <div class="mt-6">
+                {{ form_label(form.description) }}
+                {{ form_widget(form.description, { 'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-md' } }) }}
+            </div>
+        </div>
+    </div>
+    <div class="mb-8">
+        <h2 class="text-xl font-semibold mb-4">Coordonnées</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                {{ form_label(form.address) }}
+                {{ form_widget(form.address, { 'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-md' } }) }}
+            </div>
+
+            <div>
+                {{ form_label(form.addressComplement) }}
+                {{ form_widget(form.addressComplement, { 'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-md' } }) }}
+            </div>
+
+            <div>
+                {{ form_label(form.postalCode) }}
+                {{ form_widget(form.postalCode, { 'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-md' } }) }}
+            </div>
+
+            <div>
+                {{ form_label(form.location) }}
+                {{ form_widget(form.location, { 'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-md' } }) }}
+            </div>
+
+
+            <div>
+                {{ form_label(form.phone) }}
+                {{ form_widget(form.phone, { 'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-md' } }) }}
+            </div>
+
+            <div>
+                {{ form_label(form.contactEmail) }}
+                {{ form_widget(form.contactEmail, { 'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-md' } }) }}
+            </div>
+        </div>
+    </div>
+    <div class="mt-8 text-end">
+        <button type="submit" class="px-6 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700">
+            Enregistrer les modifications
+        </button>
+    </div>
+    {{ form_end(form) }}
+</div>
+{% endblock %}

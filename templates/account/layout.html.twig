@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="flex flex-nowrap flex-row justify-between">
+        <div class="w-1/6 bg-gray-200 ">
+
+            {% include('account/sidebar.html.twig') %}
+        </div>
+        <div class="w-5/6">
+            {% block accountBody %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}

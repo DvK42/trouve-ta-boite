@@ -1,0 +1,149 @@
+{% extends 'account/layout.html.twig' %}
+
+{% block accountBody %}
+
+	<div class="container mx-auto p-8 bg-white shadow-md rounded">
+		<h1 class="text-2xl font-bold mb-6">Modifier mon compte</h1>
+
+
+        {{ form_start(passwordForm) }}
+        <div class="mb-8">
+            <h2 class="text-xl font-semibold mb-4">Mettre à jour mon mot de passe</h2>
+
+            <div>
+                {{ form_widget(passwordForm.password, { 'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-md' } }) }}
+            </div>
+
+            <div class="text-end mt-6">
+                <button type="submit" class="px-6 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700">
+                    Modifier le mot de passe
+                </button>
+            </div>
+
+
+        </div>
+        
+        {{ form_end(passwordForm) }}
+
+        
+        {% if is_granted('ROLE_STUDENT') %}
+        {{ form_start(form) }}
+
+
+        <div class="mb-8">
+            <h2 class="text-xl font-semibold mb-4">Informations personnelles</h2>
+
+            <div class="w-full mb-6">
+                {{ form_label(form.email) }}
+                {{ form_widget(form.email, { 'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-md' } }) }}
+            </div>
+
+            <div class="flex flex-row flex-nowrap items-center gap-x-6 mb-6">
+                <div class="w-1/5">
+                    {{ form_label(form.gender) }}
+                    {{ form_widget(form.gender, { 'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-md' } }) }}
+                </div>
+                <div class="w-2/5">
+                    {{ form_label(form.firstName) }}
+                    {{ form_widget(form.firstName, { 'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-md' } }) }}
+                </div>
+
+                <div class="w-2/5">
+                    {{ form_label(form.lastName) }}
+                    {{ form_widget(form.lastName, { 'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-md' } }) }}
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    {{ form_label(form.dateOfBirth) }}
+                    {{ form_widget(form.dateOfBirth, { 'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-md' } }) }}
+                </div>
+
+                <div>
+                    {{ form_label(form.phone) }}
+                    {{ form_widget(form.phone, { 'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-md' } }) }}
+                </div>
+
+                <div>
+                    {{ form_label(form.address) }}
+                    {{ form_widget(form.address, { 'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-md' } }) }}
+                </div>
+
+                <div>
+                    {{ form_label(form.addressComplement) }}
+                    {{ form_widget(form.addressComplement, { 'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-md' } }) }}
+                </div>
+
+                <div>
+                    {{ form_label(form.postalCode) }}
+                    {{ form_widget(form.postalCode, { 'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-md' } }) }}
+                </div>
+
+                <div>
+                    {{ form_label(form.city) }}
+                    {{ form_widget(form.city, { 'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-md' } }) }}
+                </div>
+
+                <div>
+                    {{ form_label(form.portfolioUrl) }}
+                    {{ form_widget(form.portfolioUrl, { 'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-md' } }) }}
+                </div>
+
+                <div>
+                    {{ form_label(form.profilePicture) }}
+                    {{ form_widget(form.profilePicture, { 'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-md' } }) }}
+                </div>
+
+                <div class="flex items-center">
+                    {{ form_widget(form.isDriver, { 'attr': { 'class': 'form-checkbox rounded text-blue-600' } }) }}
+                    {{ form_label(form.isDriver, null, { 'label_attr': { 'class': 'ml-2 text-sm text-gray-700 font-bold' } }) }}
+                </div>
+
+                <div class="flex items-center">
+                    {{ form_widget(form.isHandicap, { 'attr': { 'class': 'form-checkbox rounded text-blue-600' } }) }}
+                    {{ form_label(form.isHandicap, null, { 'label_attr': { 'class': 'ml-2 text-sm text-gray-700 font-bold' } }) }}
+                </div>
+
+            </div>
+        </div>
+        <div class="mb-8">
+            <h2 class="text-xl font-semibold mb-4">Scolarité</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    {{ form_label(form.studyPlace) }}
+                    {{ form_widget(form.studyPlace, { 'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-md' } }) }}
+                </div>
+
+                <div>
+                    {{ form_label(form.education) }}
+                    {{ form_widget(form.education, { 'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-md' } }) }}
+                </div>
+
+		    </div>
+            <div class="w-full mt-6 ">
+                {{ form_label(form.skills) }}
+                <div class="mt-4 grid grid-cols-4 md:grid-cols-4 gap-4">
+                    {% for skill in form.skills %}
+                        <div class="flex items-center space-x-2">
+                            {{ form_widget(skill, { 'attr': { 'class': 'rounded-md text-blue-600 focus:ring-blue-500 cursor-pointer' } }) }}
+                            <label for="{{ skill.vars.id }}" class="text-gray-700 font-medium cursor-pointer">{{ skill.vars.label }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+		</div>        
+
+		
+        <div class="mt-8 text-end">
+			<button type="submit" class="px-6 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700">
+				Enregistrer les modifications
+			</button>
+		</div>
+
+		{{ form_end(form) }}
+        {% endif %}
+	</div>
+{% endblock %}
+
