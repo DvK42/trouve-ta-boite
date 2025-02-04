@@ -6,6 +6,7 @@ use App\Entity\Company;
 use App\Form\CompanyUpdateFormType;
 use App\Repository\CompanyRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -73,5 +74,26 @@ class CompanyController extends AbstractController
         return $this->render('company/edit.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    #[Route('/mon-entreprise/mes-offres', name: 'app_company_offer_list')]
+    public function offerList(PaginatorInterface $paginator, Request $request): Response
+    {
+        /** @var Company $company */
+        $company = $this->getUser();
+
+        $offers = $company->getOffers();
+
+        $pagination = $paginator->paginate(
+            $offers,
+            $request->query->getInt('page', 1),
+            10
+        );
+
+        return $this->render('company/offer-list.html.twig', [
+            'company' => $company,
+            'offers' => $offers,
+            'pagination' => $pagination,
+        ]); 
     }
 }

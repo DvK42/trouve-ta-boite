@@ -1,0 +1,56 @@
+{% extends 'account/layout.html.twig' %}
+
+{% block accountBody %}
+
+	<div class="container mx-auto p-8 bg-white shadow-md rounded">
+		<h1 class="text-2xl font-bold mb-6">Mes offres</h1>
+
+		{% if pagination.items|length > 0 %}
+			<table class="min-w-full bg-white border border-gray-300 rounded-md">
+				<thead>
+					<tr>
+						<th class="px-4 py-2 border-b font-semibold text-center text-gray-800">Nom de l'offre</th>
+						<th class="px-4 py-2 border-b font-semibold text-center text-gray-800">Type</th>
+						<th class="px-4 py-2 border-b font-semibold text-center text-gray-800">Lieu</th>
+						<th class="px-4 py-2 border-b font-semibold text-center text-gray-800">Date de début</th>
+						<th class="px-4 py-2 border-b font-semibold text-center text-gray-800">Candidatures</th>
+						<th class="px-4 py-2 border-b font-semibold text-center text-gray-800">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for offer in pagination.items %}
+                        <tr class="{{offer.deletedAt ? 'bg-red-500 hover:bg-red-400' : 'hover:bg-gray-100'}} px-2">
+							<td class="px-4 py-2 text-center border-b">{{ offer.name }}</td>
+							<td class="px-4 py-2 text-center border-b capitalize">{{ offer.type }}</td>
+							<td class="px-4 py-2 text-center border-b">{{ offer.location }}</td>
+							<td class="px-4 py-2 text-center border-b">{{ offer.startDate|date('d/m/Y') }}</td>
+							<td class="px-4 py-2 text-center border-b">{{ offer.applications|length }}</td>
+							<td class="px-4 py-2 border-b text-end pe-4">
+								<a href="{{ path('app_offer_detail', { id: offer.id, type: offer.type }) }}" class="text-blue-600 hover:underline">Voir</a>
+                                {#|
+								<a href="{{ path('app_offer_edit', { id: offer.id }) }}" class="text-yellow-500 hover:underline">Modifier</a>
+                                #}
+                                {% if offer.deletedAt is empty %}
+                                |
+                                <a href="{{ path('app_offer_delete', { id: offer.id, origin: 'app_company_offer_list' }) }}" class="text-red-600 hover:underline" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette offre ?');">
+									Supprimer
+								</a> 
+                                {% endif %}
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+
+			<!-- Pagination links -->
+			<div class="mt-6">
+				{{ knp_pagination_render(pagination) }}
+			</div>
+
+		{% else %}
+			<p class="text-gray-500">Vous n'avez actuellement aucune offre enregistrée.</p>
+		{% endif %}
+	</div>
+
+{% endblock %}
+

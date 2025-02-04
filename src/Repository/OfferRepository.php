@@ -21,6 +21,7 @@ class OfferRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('o')
             ->select('COUNT(o.id)')
             ->where('o.type = :type')
+            ->andWhere('o.deletedAt IS NULL')
             ->setParameter('type', $type)
             ->getQuery()
             ->getSingleScalarResult();
@@ -29,6 +30,7 @@ class OfferRepository extends ServiceEntityRepository
     public function findLatestOffers(int $limit = 8): array
     {
         return $this->createQueryBuilder('o')
+            ->where('o.deletedAt IS NULL')
             ->orderBy('o.startDate', 'DESC')
             ->setMaxResults($limit)
             ->getQuery()
@@ -39,6 +41,7 @@ class OfferRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('o')
             ->where('o.type = :type')
+            ->andWhere('o.deletedAt IS NULL')
             ->setParameter('type', $type)
             ->getQuery()
             ->setCacheable(false);
@@ -49,6 +52,7 @@ class OfferRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('o')
             ->where('o.type = :type')
             ->andWhere('o.id != :excludeId')
+            ->andWhere('o.deletedAt IS NULL')
             ->setParameter('type', $type)
             ->setParameter('excludeId', $excludeId)
             ->setMaxResults($limit)
