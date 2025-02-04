@@ -17,14 +17,14 @@ security:
       provider: app_user_provider
       custom_authenticators:
         - App\Security\UserAuthenticator
-      form_login:
-        login_path: app_login
-        check_path: app_login
-        enable_csrf: true
-        default_target_path: app_home
-        csrf_parameter: _csrf_token
-        csrf_token_id: authenticate
-      entry_point: form_login
+      # form_login:
+      #   login_path: app_login
+      #   check_path: app_login
+      #   enable_csrf: true
+      #   default_target_path: app_home
+      #   csrf_parameter: _csrf_token
+      #   csrf_token_id: authenticate
+      entry_point: App\Security\UserAuthenticator
 
       logout:
         path: app_logout

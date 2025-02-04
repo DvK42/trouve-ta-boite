@@ -9,17 +9,47 @@
 				<div class="flex flex-col items-center justify-between gap-y-8">
 					<div class="flex flex-col justify-between w-1/2 gap-x-3">
 						<div class="flex flex-row justify-between gap-x-3 mb-4">
-							<div class="w-1/2">
+							<div class="2/12">{{ form_row(form.gender,{'attr': {'class': 'border flex flex-col input-apply w-full'}}) }}</div>
+							<div class="w-5/12">
 								{{ form_row(form.firstName, {'attr': {'class': 'border flex flex-col input-apply w-full'}}) }}
 							</div>
-							<div class="w-1/2">
+							<div class="w-5/12">
 
 								{{ form_row(form.lastName, {'attr': {'class': 'border flex flex-col input-apply w-full'}}) }}
 							</div>
 						</div>
-						<div class="mb-4">{{ form_row(form.email, {'attr': {'class': 'border flex flex-col input-apply w-full'}}) }}</div>
-						<div class="mb-4">{{ form_row(form.password, {'attr': {'class': 'border flex flex-col input-apply w-full'}}) }}</div>
-						<div class="mb-4">{{ form_row(form.education, {'attr': {'class': 'border flex flex-col input-apply w-full'}}) }}</div>
+						<div class="flex flex-row justify-between gap-x-3 mb-4">
+							<div class="w-1/2">{{ form_row(form.email, {'attr': {'class': 'border flex flex-col input-apply w-full'}}) }}</div>
+							<div class="w-1/2">{{ form_row(form.password, {'attr': {'class': 'border flex flex-col input-apply w-full'}}) }}</div>
+						</div>
+						<div class="flex flex-row justify-between gap-x-3 mb-4">
+							<div class="w-1/2">{{ form_row(form.dateOfBirth, {'attr': {'class': 'border flex flex-col input-apply w-full'}}) }}</div>
+							<div class="w-1/2">{{ form_row(form.phone, {'attr': {'class': 'border flex flex-col input-apply w-full'}}) }}</div>
+						</div>
+						<div class="flex flex-row justify-between gap-x-3 mb-4">
+							<div class="w-1/2">{{ form_row(form.address,{'attr': {'class': 'border flex flex-col input-apply w-full'}}) }}</div>
+							<div class="w-1/2">{{ form_row(form.addressComplement,{'attr': {'class': 'border flex flex-col input-apply w-full'}}) }}</div>
+						</div>
+						<div class="flex flex-row justify-between gap-x-3 mb-4">
+							<div class="w-1/2">{{ form_row(form.postalCode,{'attr': {'class': 'border flex flex-col input-apply w-full'}}) }}</div>
+							<div class="w-1/2">{{ form_row(form.city,{'attr': {'class': 'border flex flex-col input-apply w-full'}}) }}</div>
+						</div>
+						<div class="flex flex-row justify-between gap-x-3 mb-4">
+							<div class="w-1/3">{{ form_row(form.education, {'attr': {'class': 'border flex flex-col input-apply w-full'}}) }}</div>
+							<div class="w-2/3">{{ form_row(form.studyPlace,{'attr': {'class': 'border flex flex-col input-apply w-full'}}) }}</div>
+						</div>
+						<div class="mb-4">{{ form_row(form.portfolioUrl,{'attr': {'class': 'border flex flex-col input-apply w-full'}}) }}</div>
+						<div class="flex flex-row justify-between gap-x-3 mb-4">
+							<div class="w-1/2 flex flex-row items-center gap-x-2">
+{{ form_widget(form.isDriver,{ 'attr': { 'class': 'form-checkbox rounded text-blue-600' } }) }}
+
+								{{ form_label(form.isDriver, null, { 'label_attr': { 'class': 'ml-2 text-sm text-gray-700 font-bold' } }) }}
+							</div>
+							<div class="w-1/2 flex flex-row items-center gap-x-2">
+								{{ form_widget(form.isHandicap, { 'attr': { 'class': 'form-checkbox rounded text-blue-600' } }) }}
+								{{ form_label(form.isHandicap, null, { 'label_attr': { 'class': 'ml-2 text-sm text-gray-700 font-bold' } }) }}
+							</div>
+						</div>
                         <button type="submit" class="btn-blue-dark w-fit border rounded px-4 py-2 mt-4 bg-blue-700 hover:bg-white border-blue-700 text-white hover:text-blue-700 transition cursor-pointer self-end">Créer mon compte</button>
 					</div>
 				</div>
