@@ -22,25 +22,25 @@ class Company extends User implements UserInterface
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255, nullable: false)]
     private ?string $location = null;
     
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $catchPhrase = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $websiteUrl = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: 'string', length: 255, nullable: false)]
     private ?string $address = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $addressComplement = null;
 
-    #[ORM\Column(type: 'string', length: 20, nullable: true)]
+    #[ORM\Column(type: 'string', length: 20, nullable: false)]
     private ?string $postalCode = null;
 
     #[ORM\Column(type: 'string', length: 20, nullable: true)]
@@ -49,10 +49,10 @@ class Company extends User implements UserInterface
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $contactEmail = null;
 
-    #[ORM\Column(type: 'integer', nullable: true)]
+    #[ORM\Column(type: 'integer', nullable: false)]
     private ?int $employeeCount = null;
 
-    #[ORM\Column(type: 'integer', nullable: true)]
+    #[ORM\Column(type: 'integer', nullable: false)]
     private ?int $yearFounded = null;
 
     #[ORM\Column(length: 255, nullable: true)]
