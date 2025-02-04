@@ -46,6 +46,10 @@ class Offer
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $deletedAt = null;
+
+
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {
@@ -366,6 +370,23 @@ class Offer
             }
         }
 
+        return $this;
+    }
+    
+    public function getDeletedAt(): ?\DateTimeInterface
+    {
+        return $this->deletedAt;
+    }
+    
+    public function setDeletedAt(?\DateTimeInterface $deletedAt): self
+    {
+        $this->deletedAt = $deletedAt;
+        return $this;
+    }
+    
+    public function softDelete(): self
+    {
+        $this->deletedAt = new \DateTimeImmutable();
         return $this;
     }
 }

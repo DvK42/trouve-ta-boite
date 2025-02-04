@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Student;
 use App\Form\ApplicationFormType;
 use App\Repository\OfferRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -56,7 +57,7 @@ class OfferController extends AbstractController
     public function apply(string $type, int $id, OfferRepository $offerRepository): Response
     {
         // Restriction -- ROLE_STUDENT
-
+        
         $offer = $offerRepository->find($id);
         $user = $this->getUser();
         
@@ -115,5 +116,24 @@ class OfferController extends AbstractController
             'studentSkills' => $student->getSkills(),
             'form' => $form->createView(),
         ]);
+    }
+
+    #[Route('/mon-entreprise/mes-offres/{id}/delete', name: 'app_offer_delete', requirements: ['type' => 'stage|alternance'])]
+    public function delete(int $id, Request $request, OfferRepository $offerRepository, EntityManagerInterface $entityManager): Response
+    {
+        $offer = $offerRepository->find($id);
+
+        if (!$offer) {
+            $this->addFlash('danger', 'L\'offre demandée n\'existe pas.');
+            return $this->redirectToRoute('app_company_offer_list');
+        }
+
+        $offer->softDelete();
+        $entityManager->flush();
+
+        $this->addFlash('success', 'L\'offre a été supprimée avec succès.');
+
+        $origin = $request->query->get('origin', 'app_company_offer_list');
+        return $this->redirectToRoute($origin);
     }
 }
