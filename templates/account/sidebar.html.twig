@@ -11,9 +11,11 @@
                 Mes offres
             </a>
         {% endif %}
-		<a href="" class="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white rounded">
-			Mes candidatures
-		</a>
+        {% if is_granted('ROLE_STUDENT') %}
+            <a href="" class="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white rounded">
+                Mes candidatures
+            </a>
+        {% endif %}
 	</nav>
 </div>
 

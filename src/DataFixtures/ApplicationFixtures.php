@@ -38,10 +38,10 @@ class ApplicationFixtures extends Fixture implements OrderedFixtureInterface
             $appliedOffers[$key] = true;
 
             $application = new Application();
-            $application->setStudentId($student);
-            $application->setOfferId($offer);
+            $application->setStudent($student);
+            $application->setOffer($offer);
             $application->setCoverLetter($faker->paragraph);
-            $application->setDate($faker->dateTimeThisYear);
+            $application->setCreatedAt($faker->dateTimeThisYear);
 
             $manager->persist($application);
 

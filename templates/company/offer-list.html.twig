@@ -24,7 +24,15 @@
 							<td class="px-4 py-2 text-center border-b capitalize">{{ offer.type }}</td>
 							<td class="px-4 py-2 text-center border-b">{{ offer.location }}</td>
 							<td class="px-4 py-2 text-center border-b">{{ offer.startDate|date('d/m/Y') }}</td>
-							<td class="px-4 py-2 text-center border-b">{{ offer.applications|length }}</td>
+							<td class="px-4 py-2 text-center border-b">
+								{% if offer.applications|length > 0%}
+								<a href="{{ path('app_offer_application_list', { id: offer.id, type: offer.type }) }}" class="text-blue-600 hover:underline">
+									{{ offer.applications|length }}
+								</a>
+								{% else %}
+									{{ offer.applications|length }}
+								{% endif %}
+							</td>
 							<td class="px-4 py-2 border-b text-end pe-4">
 								<a href="{{ path('app_offer_detail', { id: offer.id, type: offer.type }) }}" class="text-blue-600 hover:underline">Voir</a>
                                 {#|

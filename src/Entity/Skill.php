@@ -22,18 +22,18 @@ class Skill
      * @var Collection<int, Offer>
      */
     #[ORM\ManyToMany(targetEntity: Offer::class, inversedBy: 'skills')]
-    private Collection $offerId;
+    private Collection $offer;
 
     /**
      * @var Collection<int, Student>
      */
     #[ORM\ManyToMany(targetEntity: Student::class, inversedBy: 'skills')]
-    private Collection $studentId;
+    private Collection $student;
 
     public function __construct()
     {
-        $this->offerId = new ArrayCollection();
-        $this->studentId = new ArrayCollection();
+        $this->offer = new ArrayCollection();
+        $this->student = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -56,23 +56,23 @@ class Skill
     /**
      * @return Collection<int, Offer>
      */
-    public function getOfferId(): Collection
+    public function getOffer(): Collection
     {
-        return $this->offerId;
+        return $this->offer;
     }
 
-    public function addOfferId(Offer $offerId): static
+    public function addOffer(Offer $offer): static
     {
-        if (!$this->offerId->contains($offerId)) {
-            $this->offerId->add($offerId);
+        if (!$this->offer->contains($offer)) {
+            $this->offer->add($offer);
         }
 
         return $this;
     }
 
-    public function removeOfferId(Offer $offerId): static
+    public function removeOffer(Offer $offer): static
     {
-        $this->offerId->removeElement($offerId);
+        $this->offer->removeElement($offer);
 
         return $this;
     }
@@ -80,23 +80,23 @@ class Skill
     /**
      * @return Collection<int, Student>
      */
-    public function getStudentId(): Collection
+    public function getStudent(): Collection
     {
-        return $this->studentId;
+        return $this->student;
     }
 
-    public function addStudentId(Student $studentId): static
+    public function addStudent(Student $student): static
     {
-        if (!$this->studentId->contains($studentId)) {
-            $this->studentId->add($studentId);
+        if (!$this->student->contains($student)) {
+            $this->student->add($student);
         }
 
         return $this;
     }
 
-    public function removeStudentId(Student $studentId): static
+    public function removeStudent(Student $student): static
     {
-        $this->studentId->removeElement($studentId);
+        $this->student->removeElement($student);
 
         return $this;
     }

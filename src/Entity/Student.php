@@ -70,13 +70,13 @@ class Student extends User implements UserInterface
     /**
      * @var Collection<int, Application>
      */
-    #[ORM\OneToMany(targetEntity: Application::class, mappedBy: 'studentId', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Application::class, mappedBy: 'student', orphanRemoval: true)]
     private Collection $applications;
 
     /**
      * @var Collection<int, Skill>
      */
-    #[ORM\ManyToMany(targetEntity: Skill::class, mappedBy: 'studentId')]
+    #[ORM\ManyToMany(targetEntity: Skill::class, mappedBy: 'student')]
     private Collection $skills;
 
     public function getFirstName(): ?string
@@ -259,7 +259,7 @@ class Student extends User implements UserInterface
     {
         if (!$this->applications->contains($application)) {
             $this->applications->add($application);
-            $application->setStudentId($this);
+            $application->setStudent($this);
         }
 
         return $this;
@@ -268,8 +268,8 @@ class Student extends User implements UserInterface
     public function removeApplication(Application $application): static
     {
         if ($this->applications->removeElement($application)) {
-            if ($application->getStudentId() === $this) {
-                $application->setStudentId(null);
+            if ($application->getStudent() === $this) {
+                $application->setStudent(null);
             }
         }
 
@@ -288,7 +288,7 @@ class Student extends User implements UserInterface
     {
         if (!$this->skills->contains($skill)) {
             $this->skills->add($skill);
-            $skill->addStudentId($this);
+            $skill->addStudent($this);
         }
 
         return $this;
@@ -297,7 +297,7 @@ class Student extends User implements UserInterface
     public function removeSkill(Skill $skill): static
     {
         if ($this->skills->removeElement($skill)) {
-            $skill->removeStudentId($this);
+            $skill->removeStudent($this);
         }
 
         return $this;

@@ -1,0 +1,90 @@
+{% extends 'account/layout.html.twig' %}
+
+{% block accountBody %}
+	<div class="container mx-auto p-8 bg-white shadow-md rounded-md">
+		<h1 class="text-3xl font-extrabold text-gray-800 mb-8">Détails de la candidature</h1>
+
+		<div class="flex items-center space-x-6 mb-8">
+			<div class="w-24 h-24 rounded-full overflow-hidden border border-gray-300">
+				<img src="{{ student.profilePicture ? asset('uploads/profile_pictures/' ~ student.profilePicture) : asset('build/images/avatar-default.svg') }}" alt="Photo de profil" class="w-full h-full object-cover">
+			</div>
+			<div>
+				<h2 class="text-2xl font-semibold text-gray-900">{{ student.firstName }}
+					{{ student.lastName }}</h2>
+				<p class="text-gray-500 mt-1">Genre :
+					{{ student.gender|capitalize }}</p>
+			</div>
+		</div>
+
+		<div class="bg-gray-100 p-6 rounded-md mb-6">
+			<h3 class="text-xl font-bold text-gray-700 mb-4">Informations personnelles</h3>
+			<div class="grid grid-cols-2 gap-4">
+				<p>
+					<span class="font-semibold">Date de naissance :</span>
+					{{ student.dateOfBirth ? student.dateOfBirth|date('d/m/Y') : 'Non spécifiée' }}</p>
+				<p>
+					<span class="font-semibold">Téléphone :</span>
+					{{ student.phone ?: 'Non spécifié' }}</p>
+				<p>
+					<span class="font-semibold">Ville :</span>
+					{{ student.city ?: 'Non spécifiée' }}</p>
+				<p>
+					<span class="font-semibold">Code postal :</span>
+					{{ student.postalCode ?: 'Non spécifié' }}</p>
+				<p>
+					<span class="font-semibold">Portfolio :</span>
+					{% if student.portfolioUrl %}
+						<a href="{{ student.portfolioUrl }}" target="_blank" class="text-blue-600 underline">Voir le site</a>
+					{% else %}
+						Non spécifié
+					{% endif %}
+				</p>
+				<p>
+					<span class="font-semibold">Permis de conduire :</span>
+					{{ student.isDriver ? 'Oui' : 'Non' }}</p>
+				<p>
+					<span class="font-semibold">Handicap :</span>
+					{{ student.isHandicap ? 'Oui' : 'Non' }}</p>
+			</div>
+		</div>
+
+		<div class="bg-gray-100 p-6 rounded-md mb-6">
+			<h3 class="text-xl font-bold text-gray-700 mb-4">Scolarité</h3>
+			<div class="grid grid-cols-2 gap-4">
+				<p>
+					<span class="font-semibold">Établissement :</span>
+					{{ student.studyPlace ?: 'Non spécifié' }}</p>
+				<p>
+					<span class="font-semibold">Niveau d’éducation :</span>
+					{{ student.education ?: 'Non spécifié' }}</p>
+			</div>
+		</div>
+
+		<div class="bg-gray-100 p-6 rounded-md mb-6">
+			<h3 class="text-xl font-bold text-gray-700 mb-4">Compétences</h3>
+			{% if student.skills|length > 0 %}
+				<ul class="list-disc pl-6 text-gray-700">
+					{% for skill in student.skills %}
+						<li>{{ skill.name }}</li>
+					{% endfor %}
+				</ul>
+			{% else %}
+				<p class="text-gray-500">Aucune compétence spécifiée.</p>
+			{% endif %}
+		</div>
+
+		<div class="bg-gray-100 p-6 rounded-md mb-6">
+			<h3 class="text-xl font-bold text-gray-700 mb-4">Lettre de motivation</h3>
+			<div class="bg-white p-6 border border-gray-300 rounded-md text-gray-800">
+                <span>{{ application.coverLetter }}</span>
+			</div>
+		</div>
+
+		<div class="mt-8">
+			<a href="{{ path('app_offer_application_list', { id: application.offer.id }) }}" class="inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-700">
+				Retour à la liste des candidatures
+			</a>
+		</div>
+	</div>
+{% endblock %}
+

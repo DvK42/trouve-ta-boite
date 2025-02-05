@@ -65,13 +65,13 @@ class Offer
     /**
      * @var Collection<int, Application>
      */
-    #[ORM\OneToMany(targetEntity: Application::class, mappedBy: 'offerId')]
+    #[ORM\OneToMany(targetEntity: Application::class, mappedBy: 'offer')]
     private Collection $applications;
 
     /**
      * @var Collection<int, Skill>
      */
-    #[ORM\ManyToMany(targetEntity: Skill::class, mappedBy: 'offerId')]
+    #[ORM\ManyToMany(targetEntity: Skill::class, mappedBy: 'offer')]
     private Collection $skills;
 
     /**
@@ -299,7 +299,7 @@ class Offer
     {
         if (!$this->applications->contains($application)) {
             $this->applications->add($application);
-            $application->setOfferId($this);
+            $application->setOffer($this);
         }
 
         return $this;
@@ -309,8 +309,8 @@ class Offer
     {
         if ($this->applications->removeElement($application)) {
             // set the owning side to null (unless already changed)
-            if ($application->getOfferId() === $this) {
-                $application->setOfferId(null);
+            if ($application->getOffer() === $this) {
+                $application->setOffer(null);
             }
         }
 
@@ -329,7 +329,7 @@ class Offer
     {
         if (!$this->skills->contains($skill)) {
             $this->skills->add($skill);
-            $skill->addOfferId($this);
+            $skill->addOffer($this);
         }
 
         return $this;
@@ -338,7 +338,7 @@ class Offer
     public function removeSkill(Skill $skill): static
     {
         if ($this->skills->removeElement($skill)) {
-            $skill->removeOfferId($this);
+            $skill->removeOffer($this);
         }
 
         return $this;

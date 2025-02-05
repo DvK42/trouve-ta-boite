@@ -2,12 +2,13 @@
 
 namespace App\Controller;
 
-use App\Entity\Application;
+use DateTime;
 use App\Entity\Student;
+use App\Entity\Application;
 use App\Form\ApplicationFormType;
 use App\Repository\OfferRepository;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\ApplicationRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -26,7 +27,7 @@ class ApplicationController extends AbstractController
         $offer = $offerRepository->find($id);
 
         $hasApplied = $student->getApplications()->exists(function ($key, $application) use ($offer) {
-            return $application->getOfferId()->getId() === $offer->getId();
+            return $application->getOffer()->getId() === $offer->getId();
         });
 
         if($hasApplied){
@@ -73,10 +74,10 @@ class ApplicationController extends AbstractController
             }
 
             $application = new Application();
-            $application->setStudentId($student);
-            $application->setOfferId($offer);
+            $application->setStudent($student);
+            $application->setOffer($offer);
             $application->setCoverLetter($data['coverLetter']);
-            $application->setDate(new DateTime('now'));
+            $application->setCreatedAt(new DateTime('now'));
             $entityManager->persist($application);
 
             $entityManager->flush();
@@ -88,4 +89,39 @@ class ApplicationController extends AbstractController
             return $this->redirectToRoute('app_offer_apply', ['type' => $offer->getType(), 'id' => $offer->getId()]);
         }
     }
+
+    #[Route('/mon-entreprise/mes-offres/{id}/candidatures', name: 'app_offer_application_list')]
+    public function applicationList(Request $request, int $id, OfferRepository $offerRepository): Response
+    {
+        $offer = $offerRepository->find($id);
+
+        if (!$offer) {
+            $this->addFlash('error', 'L\'offre demandée n\'existe pas.');
+            return $this->redirectToRoute('app_company_offer_list');
+        }
+
+        $applications = $offer->getApplications();
+
+        return $this->render('offer/application_list.html.twig', [
+            'offer' => $offer,
+            'applications' => $applications,
+        ]);
+    }
+
+    #[Route('/mon-entreprise/mes-offres/candidature/{id}', name: 'app_application_detail')]
+    public function applicationDetail(int $id, ApplicationRepository $applicationRepository): Response
+    {
+        $application = $applicationRepository->find($id);
+
+        if (!$application) {
+            $this->addFlash('error', 'Candidature non trouvée.');
+            return $this->redirectToRoute('app_offer_application_list');
+        }
+
+        return $this->render('offer/application-detail.html.twig', [
+            'application' => $application,
+            'student' => $application->getStudent(),
+        ]);
+    }
+
 }
