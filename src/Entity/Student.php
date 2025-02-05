@@ -76,7 +76,7 @@ class Student extends User implements UserInterface
     /**
      * @var Collection<int, Skill>
      */
-    #[ORM\ManyToMany(targetEntity: Skill::class, mappedBy: 'student')]
+    #[ORM\ManyToMany(targetEntity: Skill::class, inversedBy: 'student')]
     private Collection $skills;
 
     public function getFirstName(): ?string

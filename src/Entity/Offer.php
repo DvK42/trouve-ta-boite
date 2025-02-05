@@ -71,7 +71,7 @@ class Offer
     /**
      * @var Collection<int, Skill>
      */
-    #[ORM\ManyToMany(targetEntity: Skill::class, mappedBy: 'offer')]
+    #[ORM\ManyToMany(targetEntity: Skill::class, inversedBy: 'offer')]
     private Collection $skills;
 
     /**

@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Offer;
 use App\Entity\Company;
+use App\Form\OfferFormType;
 use App\Form\CompanyUpdateFormType;
 use App\Repository\CompanyRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -87,7 +89,7 @@ class CompanyController extends AbstractController
         $pagination = $paginator->paginate(
             $offers,
             $request->query->getInt('page', 1),
-            10
+            20
         );
 
         return $this->render('company/offer-list.html.twig', [
@@ -96,4 +98,44 @@ class CompanyController extends AbstractController
             'pagination' => $pagination,
         ]); 
     }
+
+    #[Route('/mon-entreprise/nouvelle-offre', name: 'app_company_offer_new')]
+    public function newOffer(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $offer = new Offer();
+
+        $form = $this->createForm(OfferFormType::class, $offer);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Company $company */
+            $company = $this->getUser();
+            
+            $offer->setCompany($company);
+            
+            $offer->setCreatedAt(new \DateTimeImmutable());
+
+            $missions = json_decode($form->get('missionList')->getData(), true);
+            $profiles = json_decode($form->get('profileSearchedList')->getData(), true);
+
+            $offer->setMissionList($missions);
+            $offer->setProfileSearchedList($profiles);
+
+            $entityManager->persist($offer);
+
+            foreach ($form->get('skills')->getData() as $skill) {
+                $offer->addSkill($skill);
+            }
+
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Offre créée avec succès.');
+            return $this->redirectToRoute('app_company_offer_list');
+        }
+
+        return $this->render('company/new_offer.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
 }

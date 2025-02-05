@@ -21,13 +21,13 @@ class Skill
     /**
      * @var Collection<int, Offer>
      */
-    #[ORM\ManyToMany(targetEntity: Offer::class, inversedBy: 'skills')]
+    #[ORM\ManyToMany(targetEntity: Offer::class, mappedBy: 'skills')]
     private Collection $offer;
 
     /**
      * @var Collection<int, Student>
      */
-    #[ORM\ManyToMany(targetEntity: Student::class, inversedBy: 'skills')]
+    #[ORM\ManyToMany(targetEntity: Student::class, mappedBy: 'skills')]
     private Collection $student;
 
     public function __construct()

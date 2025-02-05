@@ -1,0 +1,111 @@
+{% extends 'account/layout.html.twig' %}
+
+{% block accountBody %}
+	<div class="container mx-auto p-8 bg-white shadow-md rounded-md">
+		<h1 class="text-3xl font-extrabold text-gray-800 mb-8">Créer une nouvelle offre</h1>
+
+		{{ form_start(form) }}
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+
+			{{ form_row(form.name, {'attr': {'class': 'form-input block w-full p-2 border border-gray-300 rounded-md'}}) }}
+			{{ form_row(form.type, {'attr': {'class': 'form-select block w-full p-2 border border-gray-300 rounded-md'}}) }}
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+			{{ form_row(form.startDate, {'attr': {'class': 'form-input block w-full p-2 border border-gray-300 rounded-md'}}) }}
+			{{ form_row(form.endDate, {'attr': {'class': 'form-input block w-full p-2 border border-gray-300 rounded-md'}}) }}
+			{{ form_row(form.maxApplyDate, {'attr': {'class': 'form-input block w-full p-2 border border-gray-300 rounded-md'}}) }}
+		</div>
+        <div class="mb-6">{{ form_row(form.description, {'attr': {'class': 'form-textarea block w-full p-2 border border-gray-300 rounded-md', 'rows': 4}}) }}</div>
+        <div class="mb-6">{{ form_row(form.salary, {'attr': {'class': 'form-input block w-full p-2 border border-gray-300 rounded-md'}}) }}</div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="flex flex-col space-y-2 mt-8 pb-8 skills-section">
+                <div class="mb-6">
+                    <h3 class="text-lg font-bold text-gray-800">Compétences :</h3>
+
+                    <div class="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4 border rounded-md p-6">
+                        {% for skill in form.skills %}
+                            <div class="flex items-center space-x-2">
+                                {{ form_widget(skill, { 'attr': { 'class': 'rounded-md text-blue-600 focus:ring-blue-500 cursor-pointer' } }) }}
+                                <label for="{{ skill.vars.id }}" class="text-gray-700 font-medium cursor-pointer">{{ skill.vars.label }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-col space-y-2 mt-8 pb-8 skills-section">
+                <div class="mb-6">
+                    <h3 class="text-lg font-bold text-gray-800">Catégories :</h3>
+                    <div class="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4 border rounded-md p-6">
+                        {% for category in form.categories %}
+                            <div class="flex items-center space-x-2">
+                                {{ form_widget(category, { 'attr': { 'class': 'rounded-md text-blue-600 focus:ring-blue-500 cursor-pointer' } }) }}
+                                <label for="{{ category.vars.id }}" class="text-gray-700 font-medium cursor-pointer">{{ category.vars.label }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="mb-6">
+                <label class="block text-sm font-bold mb-2 text-gray-800">Missions</label>
+                <ul id="mission-list" class="space-y-2"></ul>
+                <button type="button" id="add-mission-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Ajouter une mission</button>
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-sm font-bold mb-2 text-gray-800">Profils recherchés</label>
+                <ul id="profile-list" class="space-y-2"></ul>
+                <button type="button" id="add-profile-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Ajouter un profil</button>
+            </div>
+		</div>
+
+		<div class="flex items-center justify-between mt-8">
+			<a href="{{path('app_company_offer_list')}}" class="px-6 py-3 bg-red-600 text-white font-semibold rounded-md shadow-md hover:bg-red-700 transition">
+				Annuler
+			</a>
+			<button type="submit" class="px-6 py-3 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-700 transition">
+				Créer l'offre
+			</button>
+		</div>
+		{{ form_end(form) }}
+	</div>
+{% endblock %}
+
+{% block page_specific_scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const missionList = document.getElementById('mission-list');
+            const profileList = document.getElementById('profile-list');
+
+            document.getElementById('add-mission-btn').addEventListener('click', function () {
+                addField(missionList, 'mission');
+            });
+
+            document.getElementById('add-profile-btn').addEventListener('click', function () {
+                addField(profileList, 'profile');
+            });
+
+            function addField(list, type) {
+                const input = document.createElement('input');
+                input.setAttribute('type', 'text');
+                input.setAttribute('placeholder', type === 'mission' ? 'Nouvelle mission' : 'Nouveau profil recherché');
+                input.classList.add('form-input', 'block', 'w-full', 'p-2', 'border', 'border-gray-300', 'rounded-md', 'mb-2');
+                list.appendChild(input);
+            }
+
+            document.querySelector('form').addEventListener('submit', function (e) {
+                const missions = Array.from(missionList.querySelectorAll('input')).map(input => input.value.trim()).filter(value => value !== '');
+
+                const profiles = Array.from(profileList.querySelectorAll('input')).map(input => input.value.trim()).filter(value => value !== '');
+
+                document.querySelector('[name="offer_form[missionList]"]').value = JSON.stringify(missions);
+                document.querySelector('[name="offer_form[profileSearchedList]"]').value = JSON.stringify(profiles);
+            });
+        });
+    </script>
+{% endblock %}
+
+
+
