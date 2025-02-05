@@ -44,7 +44,7 @@ security:
   access_control:
     - { path: ^/admin, roles: ROLE_ADMIN }
     - { path: ^/mon-compte, roles: ROLE_USER }
-    - { path: ^/ma-boite, roles: ROLE_COMPANY }
+    - { path: ^/mon-entreprise, roles: ROLE_COMPANY }
     - { path: ^/postuler, roles: ROLE_USER }
 
 when@test:

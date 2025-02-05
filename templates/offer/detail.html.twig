@@ -125,13 +125,15 @@
 					<div class="flex justify-between">
 						<span>Gratification</span>
 						{% if offer.type is same as('stage') %}
-							{% if offer.duration > 44 %}
+							{% if offer.salary is not empty %}
+								<span class="font-semibold text-blue-dark">{{offer.salary}}€/mois</span>
+							{% elseif offer.duration > 44 %}
 								<span class="font-semibold text-blue-dark">Obligatoire</span>
 							{% else %}
 								<span class="font-semibold text-blue-dark">Non obligatoire</span>
 							{% endif %}
-						{% elseif offer.salary is defined %}
-							<span class="font-semibold text-blue-dark">{{offer.salary}}€</span>
+						{% elseif offer.salary is not empty %}
+							<span class="font-semibold text-blue-dark">{{offer.salary}}€/mois</span>
 						{% else %}
 							<span class="font-semibold text-blue-dark">Non renseigné</span>
 						{% endif %}
