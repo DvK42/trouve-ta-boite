@@ -16,18 +16,30 @@ class Application
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $date = null;
-
     #[ORM\Column(type: Types::TEXT)]
     private ?string $coverLetter = null;
 
     #[ORM\ManyToOne(inversedBy: 'applications')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Student $studentId = null;
+    private ?Student $student = null;
 
     #[ORM\ManyToOne(inversedBy: 'applications')]
-    private ?Offer $offerId = null;
+    private ?Offer $offer = null;
+
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $deletedAt = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $createdAt = null;
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        if (!$this->createdAt) {
+            $this->createdAt = new \DateTime();
+        }
+    }
 
     /**
      * @var Collection<int, Message>
@@ -45,18 +57,6 @@ class Application
         return $this->id;
     }
 
-    public function getDate(): ?\DateTimeInterface
-    {
-        return $this->date;
-    }
-
-    public function setDate(\DateTimeInterface $date): static
-    {
-        $this->date = $date;
-
-        return $this;
-    }
-
     public function getCoverLetter(): ?string
     {
         return $this->coverLetter;
@@ -69,26 +69,26 @@ class Application
         return $this;
     }
 
-    public function getStudentId(): ?Student
+    public function getStudent(): ?Student
     {
-        return $this->studentId;
+        return $this->student;
     }
 
-    public function setStudentId(?Student $studentId): static
+    public function setStudent(?Student $student): static
     {
-        $this->studentId = $studentId;
+        $this->student = $student;
 
         return $this;
     }
 
-    public function getOfferId(): ?Offer
+    public function getOffer(): ?Offer
     {
-        return $this->offerId;
+        return $this->offer;
     }
 
-    public function setOfferId(?Offer $offerId): static
+    public function setOffer(?Offer $offer): static
     {
-        $this->offerId = $offerId;
+        $this->offer = $offer;
 
         return $this;
     }
@@ -120,6 +120,35 @@ class Application
             }
         }
 
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getDeletedAt(): ?\DateTimeInterface
+    {
+        return $this->deletedAt;
+    }
+    
+    public function setDeletedAt(?\DateTimeInterface $deletedAt): self
+    {
+        $this->deletedAt = $deletedAt;
+        return $this;
+    }
+    
+    public function softDelete(): self
+    {
+        $this->deletedAt = new \DateTimeImmutable();
         return $this;
     }
 }

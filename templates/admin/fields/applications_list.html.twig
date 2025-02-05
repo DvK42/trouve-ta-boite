@@ -3,11 +3,11 @@
 		{% for application in field.value %}
 			<li>
 				<strong>Offre :</strong>
-				<span style="text-transform: capitalize">{{application.offerId.type}}</span>
+				<span style="text-transform: capitalize">{{application.offer.type}}</span>
 				-
-				{{ application.offerId.name }}
+				{{ application.offer.name }}
 				-
-				{{application.offerId.company.name}}
+				{{application.offer.company.name}}
 				<a href="{{ path('admin', { entity: 'Application', action: 'show', id: application.id }) }}" style="margin-left: 10px">Voir les détails</a>
 
 			</li>

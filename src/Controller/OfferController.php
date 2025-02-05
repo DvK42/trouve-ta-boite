@@ -23,7 +23,7 @@ class OfferController extends AbstractController
             /** @var Student $user */
             $user = $this->getUser();
             $hasApplied = $user->getApplications()->exists(function ($key, $application) use ($offer) {
-                return $application->getOfferId()->getId() === $offer->getId();
+                return $application->getOffer()->getId() === $offer->getId();
             });
         }
         $startDate = $offer->getStartDate();
@@ -66,7 +66,7 @@ class OfferController extends AbstractController
             $student = $user;
             
             $hasApplied = $student->getApplications()->exists(function ($key, $application) use ($offer) {
-                return $application->getOfferId()->getId() === $offer->getId();
+                return $application->getOffer()->getId() === $offer->getId();
             });
         }else{
             $this->addFlash('error', 'Vous n\'avez pas les permissions pour postuler !');
