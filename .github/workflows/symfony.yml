@@ -48,7 +48,7 @@ jobs:
         run: npm install
 
       - name: Run Encore
-        run: npm run watch
+        run: npm run dev
 
       - name: Run PHPUnit tests
         run: vendor/bin/phpunit
