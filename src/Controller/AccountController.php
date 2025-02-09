@@ -3,8 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\AccountFormType;
-use App\Form\CompanyUpdateFormType;
+use App\Entity\Application;
 use App\Form\StudentUpdateFormType;
 use App\Form\UserPasswordUpdateFormType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -68,4 +67,36 @@ class AccountController extends AbstractController
             'passwordForm' => $passwordForm->createView(),
         ]);
     }
+
+    #[Route('/mon-compte/candidatures', name: 'app_student_applications')]
+    public function applications(EntityManagerInterface $entityManager): Response
+    {
+        /** @var Student $student */
+        $student = $this->getUser();
+
+        $applications = $student->getApplications();
+
+        return $this->render('student/applications.html.twig', [
+            'applications' => $applications,
+        ]);
+    }
+
+    #[Route('/mon-compte/candidature/{id}/delete', name: 'app_student_application_delete')]
+    public function applicationDelete(int $id, EntityManagerInterface $entityManager): Response
+    {
+        $application = $entityManager->getRepository(Application::class)->find($id);
+        if (!$application) {
+            $this->addFlash('error', 'Candidature non trouvée.');
+            return $this->redirectToRoute('app_student_applications');
+        }
+
+        // Marquer comme supprimée
+        $application->softDelete();
+
+        $entityManager->flush();
+
+        $this->addFlash('success', 'La candidature a été supprimée avec succès.');
+        return $this->redirectToRoute('app_student_applications');
+    }
+
 }

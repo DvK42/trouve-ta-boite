@@ -93,11 +93,26 @@ class ApplicationController extends AbstractController
     #[Route('/mon-entreprise/mes-offres/{id}/candidatures', name: 'app_offer_application_list')]
     public function applicationList(Request $request, int $id, OfferRepository $offerRepository): Response
     {
+        if(!$this->getUser()){
+            $this->addFlash('error', 'Vous n\'êtes pas autorisé à voir ceci.');
+            return $this->redirectToRoute('app_home');
+        }
+
+        $user = $this->getUser();
+        /** @var Company $company */
+        $company = $user;
+
         $offer = $offerRepository->find($id);
 
         if (!$offer) {
             $this->addFlash('error', 'L\'offre demandée n\'existe pas.');
             return $this->redirectToRoute('app_company_offer_list');
+        }
+
+        if($offer->getCompany()->getId() !== $company->getId() ){
+            $this->addFlash('error', 'Ceci n\'est pas à vous...');
+            return $this->redirectToRoute('app_company_offer_list');
+
         }
 
         $applications = $offer->getApplications();
@@ -111,11 +126,26 @@ class ApplicationController extends AbstractController
     #[Route('/mon-entreprise/mes-offres/candidature/{id}', name: 'app_application_detail')]
     public function applicationDetail(int $id, ApplicationRepository $applicationRepository): Response
     {
+        if(!$this->getUser()){
+            $this->addFlash('error', 'Vous n\'êtes pas autorisé à voir ceci.');
+            return $this->redirectToRoute('app_home');
+        }
+
+        $user = $this->getUser();
+        /** @var Company $company */
+        $company = $user;
+
         $application = $applicationRepository->find($id);
 
         if (!$application) {
             $this->addFlash('error', 'Candidature non trouvée.');
-            return $this->redirectToRoute('app_offer_application_list');
+            return $this->redirectToRoute('app_company_offer_list');
+        }
+
+        if($application->getOffer()->getCompany()->getId() !== $company->getId() ){
+            $this->addFlash('error', 'Ceci n\'est pas à vous...');
+            return $this->redirectToRoute('app_company_offer_list');
+
         }
 
         return $this->render('offer/application-detail.html.twig', [

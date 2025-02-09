@@ -19,17 +19,6 @@ class OfferController extends AbstractController
         $offer = $offerRepository->find($id);
         $hasApplied = false;
         
-        if($this->isGranted('ROLE_STUDENT')){
-            /** @var Student $user */
-            $user = $this->getUser();
-            $hasApplied = $user->getApplications()->exists(function ($key, $application) use ($offer) {
-                return $application->getOffer()->getId() === $offer->getId();
-            });
-        }
-        $startDate = $offer->getStartDate();
-        $endDate = $offer->getEndDate();
-        $duration = $startDate->diff($endDate)->days;
-        $offer->duration = $duration;
 
         if (!$offer) {
             throw $this->createNotFoundException('Offre non trouvée');
@@ -38,6 +27,24 @@ class OfferController extends AbstractController
         if ($type !== $offer->getType()) {
             throw $this->createNotFoundException('Type d\'offre non valide');
         }
+
+        if ($offer->getDeletedAt() !== null && $offer->getCompany() !== $this->getUser()) {
+            $this->addFlash('error', 'Vous ne pouvez pas accéder à cette offre car elle a été supprimée.');
+            return $this->redirectToRoute('app_home');
+        }
+
+        if($this->isGranted('ROLE_STUDENT')){
+            /** @var Student $user */
+            $user = $this->getUser();
+            $hasApplied = $user->getApplications()->exists(function ($key, $application) use ($offer) {
+                return $application->getOffer()->getId() === $offer->getId() && $application->getDeletedAt() === null;
+            });
+        }
+        
+        $startDate = $offer->getStartDate();
+        $endDate = $offer->getEndDate();
+        $duration = $startDate->diff($endDate)->days;
+        $offer->duration = $duration;
 
         $similarOffers = $offerRepository->findSimilarOffers($type, $id, 8);
         $routeListName = $type === 'stage' ? 'app_stage_list' : 'app_alternance_list';
