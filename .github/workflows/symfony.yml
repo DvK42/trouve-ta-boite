@@ -44,6 +44,9 @@ jobs:
       - name: Install dependencies
         run: composer install --no-progress --prefer-dist
 
+      - name: Running Encore
+        run: npm run watch
+
       - name: Run PHPUnit tests
         run: vendor/bin/phpunit
 
