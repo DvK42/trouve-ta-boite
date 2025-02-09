@@ -9,12 +9,12 @@ class HomepageTest extends WebTestCase
     public function testHomepageIsAccessible(): void
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/');
+        $crawler = $client->request('GET', '/login');
 
         // Vérifie que la page a un code 200
         $this->assertResponseIsSuccessful();
 
         // Vérifie la présence d'un élément clé dans la page
-        $this->assertSelectorTextContains('title', 'Trouve Ta Boîte - Bienvenue');
+        $this->assertSelectorTextContains('h1', 'Connexion');
     }
 }
