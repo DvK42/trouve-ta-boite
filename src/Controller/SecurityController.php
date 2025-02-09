@@ -5,9 +5,10 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Company;
 use App\Entity\Student;
+use App\Service\MailService;
+use App\Security\UserAuthenticator;
 use App\Form\RegisterChoiceFormType;
 use App\Form\RegisterStudentFormType;
-use App\Security\UserAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\RegisterCompanyStep1FormType;
 use App\Form\RegisterCompanyStep2FormType;
@@ -33,10 +34,8 @@ class SecurityController extends AbstractController
         if ($this->getUser()) {
             return $this->redirectToRoute('app_home');
         }
-        // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
 
-        // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
         return $this->render('security/login.html.twig', [
@@ -76,7 +75,7 @@ class SecurityController extends AbstractController
     }
 
     #[Route(path: '/register/student', name: 'app_register_student')]
-    public function registerStudent(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    public function registerStudent(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, MailService $mailService): Response
     {
         if ($this->getUser()) {
             return $this->redirectToRoute('app_home');
@@ -91,6 +90,8 @@ class SecurityController extends AbstractController
             $student->setPassword($hashedPassword);
             $entityManager->persist($student);
             $entityManager->flush();
+
+            $mailService->sendWelcomeEmail($student->getEmail(), $student->getFirstName(), 'student');
 
             $this->userAuthenticator->authenticateUser(
                 $student,
@@ -108,7 +109,7 @@ class SecurityController extends AbstractController
     }
     
     #[Route(path: '/register/company/step1', name: 'app_register_company_1')]
-    public function registerCompanyStep1(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    public function registerCompanyStep1(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, MailService $mailService): Response
     {
         if ($this->getUser()) {
             return $this->redirectToRoute('app_home');
@@ -153,6 +154,8 @@ class SecurityController extends AbstractController
             $entityManager->persist($company);
             $entityManager->persist($company);
             $entityManager->flush();
+
+            $mailService->sendWelcomeEmail($company->getEmail(), $company->getName(), 'student');
 
             $this->userAuthenticator->authenticateUser(
                 $company,

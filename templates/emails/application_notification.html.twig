@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Nouvelle Candidature</title>
+	</head>
+	<body style="font-family: Arial, sans-serif; line-height: 1.6;">
+		<h2>Nouvelle candidature pour votre offre :
+			{{ offer.name }}</h2>
+
+		<p>
+			<strong>Offre :</strong>
+			{{ offer.name }}</p>
+		<p>
+			<strong>Date de début :</strong>
+			{{ offer.startDate|date('d/m/Y') }}</p>
+		<p>
+			<strong>Lieu :</strong>
+			{{ offer.location }}</p>
+
+		<h3>Informations sur le candidat :</h3>
+		<ul>
+			<li>
+				<strong>Nom :</strong>
+				{{ student.firstName }}
+				{{ student.lastName }}</li>
+			<li>
+				<strong>Email :</strong>
+				{{ student.email }}</li>
+			<li>
+				<strong>Numéro de téléphone :</strong>
+				{{ student.phone }}</li>
+			<li>
+				<strong>Niveau d'études :</strong>
+				{{ student.education }}</li>
+			<li>
+				<strong>Établissement :</strong>
+				{{ student.studyPlace }}</li>
+		</ul>
+
+		<h3>Lettre de motivation :</h3>
+		<p>{{ application.coverLetter }}</p>
+
+		<hr>
+		<p>Cet e-mail est généré automatiquement, merci de ne pas y répondre.</p>
+	</body>
+</html>
+

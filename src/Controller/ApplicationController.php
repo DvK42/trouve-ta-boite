@@ -5,6 +5,7 @@ namespace App\Controller;
 use DateTime;
 use App\Entity\Student;
 use App\Entity\Application;
+use App\Service\MailService;
 use App\Form\ApplicationFormType;
 use App\Repository\OfferRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,7 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ApplicationController extends AbstractController
 {
     #[Route('/{type}/{id}/postuler/post', name: 'app_offer_apply_application', requirements: ['type' => 'stage|alternance'])]
-    public function post(Request $request, int $id, EntityManagerInterface $entityManager, OfferRepository $offerRepository): Response
+    public function post(Request $request, int $id, EntityManagerInterface $entityManager, OfferRepository $offerRepository, MailService $mailService): Response
     {
         $form = $this->createForm(ApplicationFormType::class);
 
@@ -82,6 +83,9 @@ class ApplicationController extends AbstractController
 
             $entityManager->flush();
             
+            $mailService->sendApplicationNotificationToCompany($offer, $student, $application);
+            $mailService->sendApplicationConfirmationToStudent($offer, $student);
+
             $this->addFlash('success', 'Votre candidature a été envoyée avec succès.');
             return $this->redirectToRoute('app_offer_detail', ['type' => $offer->getType(), 'id' => $offer->getId()]);
         }else{
