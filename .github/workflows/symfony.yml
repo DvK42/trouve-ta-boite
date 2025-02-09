@@ -38,6 +38,9 @@ jobs:
           php-version: 8.2
           tools: composer, symfony
 
+      - name: Set environment variables
+        run: cp .env.test .env
+      
       - name: Install dependencies
         run: composer install --no-progress --prefer-dist
 
