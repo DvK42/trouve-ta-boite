@@ -12,9 +12,9 @@
 
             <div class="flex flex-row justify-around">
                 <ul class="flex flex-col space-y-2">
-                    <li><a href="#" class="hover:text-white pb-2">Accueil</a></li>
-                    <li><a href="#" class="hover:text-white pb-2">Stage</a></li>
-                    <li><a href="#" class="hover:text-white pb-2">Alternances</a></li>
+                    <li><a href="{{ path('app_home') }}" class="hover:text-white pb-2">Accueil</a></li>
+                    <li><a href="{{ path('app_stage_list') }}" class="hover:text-white pb-2">Stage</a></li>
+                    <li><a href="{{ path('app_alternance_list') }}" class="hover:text-white pb-2">Alternances</a></li>
                     <li><a href="#" class="hover:text-white pb-2">Entreprises</a></li>
                     <li><a href="#" class="hover:text-white">Étudiants</a></li>
                 </ul>

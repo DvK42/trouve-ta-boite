@@ -4,16 +4,23 @@
 	<div class="container mx-auto p-8 bg-white shadow-md rounded-md">
 		<h1 class="text-3xl font-extrabold text-gray-800 mb-8">Détails de la candidature</h1>
 
-		<div class="flex items-center space-x-6 mb-8">
-			<div class="w-24 h-24 rounded-full overflow-hidden border border-gray-300">
-				<img src="{{ student.profilePicture ? asset('uploads/profile_pictures/' ~ student.profilePicture) : asset('build/images/avatar-default.svg') }}" alt="Photo de profil" class="w-full h-full object-cover">
+		<div class="flex justify-between items-center mb-8">
+			<div class="flex items-center space-x-6">
+				<div class="w-24 h-24 rounded-full overflow-hidden border border-gray-300">
+					<img src="{{ student.profilePicture ? asset('uploads/profile_pictures/' ~ student.profilePicture) : asset('build/images/avatar-default.svg') }}" alt="Photo de profil" class="w-full h-full object-cover">
+				</div>
+				<div>
+					<h2 class="text-2xl font-semibold text-gray-900">{{ student.firstName }}
+						{{ student.lastName }}</h2>
+					<p class="text-gray-500 mt-1">Genre :
+						{{ student.gender|capitalize }}</p>
+				</div>
 			</div>
-			<div>
-				<h2 class="text-2xl font-semibold text-gray-900">{{ student.firstName }}
-					{{ student.lastName }}</h2>
-				<p class="text-gray-500 mt-1">Genre :
-					{{ student.gender|capitalize }}</p>
+			{% if application.deletedAt is not empty %}
+			<div class="py-3 px-12 bg-red-600">
+				<span class="text-white">Désisté</span>
 			</div>
+			{% endif %}
 		</div>
 
 		<div class="bg-gray-100 p-6 rounded-md mb-6">

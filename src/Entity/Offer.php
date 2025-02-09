@@ -291,9 +291,18 @@ class Offer
     }
 
     public function getApplicationsCount(): int
-{
-    return $this->applications->count();
-}
+    {
+        return $this->applications->filter(function ($application) {
+            return $application->getDeletedAt() === null;
+        })->count();
+    }
+
+    public function getActiveApplications(): array
+    {
+        return $this->applications->filter(function ($application) {
+            return $application->getDeletedAt() === null;
+        })->toArray();
+    }
 
     public function addApplication(Application $application): static
     {
